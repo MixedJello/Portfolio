@@ -1,0 +1,15 @@
+.x-line {
+    position: "absolute";
+    left: 0;
+    width: "100%";
+    background-color: #00f0ff;
+    opacity: 0.5;
+}
+
+.y-line {
+    position: "absolute";
+    top: 0;
+    height: "100%";
+    background-color: #00f0ff;
+    opacity: 0.5;
+}

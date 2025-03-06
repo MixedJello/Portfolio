@@ -1,0 +1,20 @@
+.hero, .intro, .outro {
+    position: relative;
+    width: 100vw;
+    _height: 100vh;
+    padding: 2em;
+}
+
+.hero {
+    padding: 0
+}
+
+.into, .outro {
+    /* background-color: #ffffff; */
+    display: flex;
+    align-items: center;
+
+    h1, .fnt-1 {
+        margin-bottom: 0;
+    }
+}

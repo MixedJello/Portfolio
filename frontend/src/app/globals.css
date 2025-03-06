@@ -1,0 +1,192 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap');
+
+@font-face {
+  font-family: "Orbitron";
+  src: url('/frontend//public/fonts/Orbitron-VariableFont_wght.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;    
+}
+
+/* Variable Controls */
+:root {
+  --btn-v1-pd-y: 1rem;
+  --btn-v1-pd-x: 1.5rem;
+
+  --btn-trn-sp: 0.3s;
+  --btn-trn-tf: ease;
+
+  --btn-fs: 1.1875rem;
+
+  --buttons: #ff004d;
+  --primary: #00f0ff; /* Cyan alt to test: #00e6e6 */
+  --secondary: #00ff99;
+  --text: #FFFFFF;
+  --primary-alt: #ff004d;
+  --black: #000000;
+  --text-alt: #FFFFFF;
+  --white: #FFFFFF;
+  --dk-bg: #0a0a0a;
+  --dk-bg-alt: #1a1a1a; /* Alt to consider #121212 */
+  --glow: #222831;
+
+  --fnt-t: "Orbitron", sans-serif;
+  --fnt-m: "Titillium Web", sans-serif;
+
+  --fnt-t-big-ff: var(--fnt-t); 
+  --fnt-t-big-ls: 0em; 
+  --fnt-t-big-w: 400; 
+  --fnt-t-big-tt: none; 
+  --fnt-t-big-s: 2.5rem; 
+  --fnt-t-big-lh: .95; 
+  --fnt-t-big-s-mtp: 1;
+
+  --fnt-t-1-ff: var(--fnt-t); 
+  --fnt-t-1-ls: .1rem; 
+  --fnt-t-1-w: 300; 
+  --fnt-t-1-tt: uppercase; 
+  --fnt-t-1-s: 2rem; 
+  --fnt-t-1-lh: 1.14; 
+  --fnt-t-1-s-mtp: 1; 
+
+  --fnt-t-2-ff: var(--fnt-m); 
+  --fnt-t-2-ls: 0em; 
+  --fnt-t-2-w: 400; 
+  --fnt-t-2-tt: none; 
+  --fnt-t-2-s: 1.125rem;
+  --fnt-t-2-lh: 1.5; 
+  --fnt-t-2-s-mtp: 1;
+
+  --fnt-t-3-ff: var(--fnt-t); 
+  --fnt-t-3-ls: .22rem; 
+  --fnt-t-3-w: 300; 
+  --fnt-t-3-tt: uppercase; 
+  --fnt-t-3-s: 1.25rem; 
+  --fnt-t-3-lh: 1.2; 
+  --fnt-t-3-s-mtp: 1;
+
+  --trn-sp: .3s;
+  --trn-tf: ease;
+}
+
+/* General CSS o7 */
+
+#HeaderZone {
+  padding-bottom: 3rem;
+}
+
+.sec-nav a, .mn-nav a, .ftr-nav ul a {
+  padding: .75rem .5rem;
+
+  &:is(:hover, :focus) {
+      color: var(--primary);
+  }
+}
+
+a {
+  transition: color var(--trn-sp) var(--trn-tf) 0s;
+}
+
+body {
+  overflow-y: scroll;
+  background-color: var(--dk-bg);
+  color: var(--text-alt);
+}
+
+[class*="mn-w"] {
+  max-width: 90vw;
+  margin: 0 auto;
+}
+
+.mn-w-wd {
+  max-width: clamp(70vw, 85rem, 90vw);
+}
+
+/* Font Styles */
+.fnt-big {
+  font-family: var(--fnt-t);
+  font-size: calc(var(--fnt-t-big-s) * var(--fnt-t-big-s-mtp));
+  letter-spacing: var(--fnt-t-big-ls);
+  line-height: var(--fnt-t-big-lh);
+  font-weight: var(--fnt-t-big-w);
+  text-transform: var(--fnt-t-big-tt);
+}
+
+h1, .fnt-1 {
+  font-family: var(--fnt-t-1-ff);
+  font-size: calc(var(--fnt-t-1-s) * var(--fnt-t-1-s-mtp));
+  letter-spacing: var(--fnt-t-1-ls);
+  line-height: var(--fnt-t-1-lh);
+  font-weight: var(--fnt-t-1-w);
+  text-transform: var(--fnt-t-1-tt);
+  word-break: break-word;
+}
+
+h2, .fnt-2 {
+  font-family: var(--fnt-t-2-ff);
+  font-size: calc(var(--fnt-t-2-s) * var(--fnt-t-2-s-mtp));
+  letter-spacing: var(--fnt-t-2-ls);
+  line-height: var(--fnt-t-2-lh);
+  font-weight: var(--fnt-t-2-w);
+  text-transform: var(--fnt-t-2-tt);
+}
+
+h3, .fnt-3 {
+  font-family: var(--fnt-t-3-ff);
+  font-size: calc(var(--fnt-t-3-s) * var(--fnt-t-3-s-mtp));
+  letter-spacing: var(--fnt-t-3-ls);
+  line-height: var(--fnt-t-3-lh);
+  font-weight: var(--fnt-t-3-w);
+  text-transform: var(--fnt-t-3-tt);
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Buttons */
+.btn {
+  cursor: pointer;
+  position: relative;
+  font-size: var(--btn-fs);
+
+  &.v1 {
+      z-index: 1;
+      overflow: hidden;
+      text-align: center;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--btn-v1-pd-y) var(--btn-v1-pd-x);
+      transition: background-color var(--btn-trn-sp) var(--btn-trn-tf) 0s, color var(--btn-trn-sp) var(--btn-trn-tf) 0s;
+      color: var(--text-alt);
+      background-color: var(--buttons);
+      border: 2px solid var(--buttons);
+      width: auto;
+      margin: 0 auto;
+
+      &:is(:hover, :focus) {
+          color: var(--buttons);
+          background-color: var(--white);
+          border: 2px solid var(--buttons)
+      }
+
+  }
+  &.v2 {
+      z-index: 1;
+      overflow: hidden;
+      text-align: center;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--btn-v1-pd-y) var(--btn-v1-pd-x);
+      transition: background-color var(--btn-trn-sp) var(--btn-trn-tf) 0s, color var(--btn-trn-sp) var(--btn-trn-tf) 0s;
+      color: var(--buttons);
+      background-color: var(--white);
+      border: 2px solid var(--buttons);
+
+
+  }
+}
