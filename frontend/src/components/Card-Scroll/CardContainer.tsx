@@ -1,125 +1,139 @@
-import React from 'react';
+"use client";
+import React, { useRef, useEffect } from "react";
 import Card from "@/components/Card-Scroll/Card";
-import Image from 'next/image';
-import HeroImg from "../../../public/assets/hero.jpg";
-import { useRef, useEffect } from "react";
-import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";
 import Lenis from "lenis";
 import "@/styles/cards/card-tools.css";
 
+gsap.registerPlugin(ScrollTrigger);
+
 const cards = [
   {
-    title: "Corniest of Dad Jokes",
-    content: "Filler filler blah blah",
-    index: 0
+    title: "Style Weaver",
+    content: `An application that would accumulate design styles specified within the designed format, Figma, convert it to the code equivalent, and generate a foundational stylesheet for a developer to start a new development on a website, improving efficiency by a minimum of 20%.`,
+    index: 0,
   },
   {
-    title: "Super Cool Guy",
-    content: "Filler filler blah blah",
-    index: 1
+    title: "Scrapey",
+    content: `An application that automated a process of scraping every single page of a specific client websites with the goal of looking for any JavaScript tags or iframes on the pages, gather that data and generate a CSV file with the element, path to the page, and listed out scripts that were on all pages of a site.`,
+    index: 1,
   },
   {
-    title: "But wait theres more!",
-    content: "Filler filler blah blah",
-    index: 2
+    title: "Aqua-Tots Swim School",
+    content: "https://www.aquatotsfranchise.com/ developed this brand specific website using HTML, CSS, JavaScript, and SQL to achieve its complex design",
+    index: 2,
   },
   {
     title: "Wow that's a baseball!",
     content: "Filler filler blah blah",
-    index: 3
+    index: 3,
   },
-]
-
-gsap.registerPlugin(ScrollTrigger);
+];
 
 export default function CardContainer() {
-  useEffect(() => {
-    const lenis = new Lenis({
-      smoothWheel: true, //Enables smooth scrolling on wheel events 
-      syncTouch: true, //synchronizes touch gestures
-      lerp: 0.1, //Adjusts the smoothness (higher = less smooth)
-      duration: 1.2, //Adjusts the duration of scroll animations
-
-    });
-
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-  }, []);
-
   const container = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
-    if (!container.current) return;
-    const cardElements = container.current.querySelectorAll(".card");
-    if (cardElements.length === 0) return;
-
-    
-
-    ScrollTrigger.create({
-      trigger: cardElements[0],
-      start: "top 35%",
-      endTrigger: cardElements[cardElements.length - 1],
-      end: "top 30%",
-      pin: ".intro",
-      pinSpacing: false,
+  // Initialize Lenis and sync with ScrollTrigger
+  useEffect(() => {
+    const lenis = new Lenis({
+      smoothWheel: true,
+      syncTouch: true,
+      lerp: 0.1,
+      duration: 1.2,
     });
 
-    cardElements.forEach((card, index) => {
-      const isLast = index === cardElements.length -1;
-      const cardInner = card.querySelector(".card-inner");
+    // Sync Lenis with ScrollTrigger
+    lenis.on("scroll", ScrollTrigger.update);
 
-      if (!isLast) {
-        ScrollTrigger.create({
-          trigger: card,
-          start: "top 35%",
-          endTrigger: ".outro",
-          end: "top 65%",
-          pin: true,
-          pinSpacing: false,
-        });
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
 
-        gsap.to(cardInner, {
-          y: `-${(cards.length - index) * 14}vh`,
-          ease: "none",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 35%",
-            endTrigger: ".outro",
-            end: "top 65%",
-            scrub: true,
-          }
-        });
-      }
-    })
+    gsap.ticker.lagSmoothing(0); // Prevent lag between Lenis and GSAP
+
     return () => {
-      ScrollTrigger.getAll().forEach((trigger) => 
-      trigger.kill());
-    }
-  }, { scope: container });
+      lenis.destroy();
+      gsap.ticker.remove((time) => lenis.raf(time * 1000));
+    };
+  }, []);
 
+  useGSAP(
+    () => {
+      if (!container.current) return;
+      const cardElements = container.current.querySelectorAll(".card") as NodeListOf<HTMLElement>;
+      if (cardElements.length === 0) return;
+
+      // Pin the intro section
+      ScrollTrigger.create({
+        trigger: ".intro",
+        start: "top top", // Pin when intro hits top of viewport
+        endTrigger: cardElements[cardElements.length - 1],
+        end: "top 20%", // Unpin when last card is near top
+        pin: true,
+        pinSpacing: false,
+      });
+
+      // Animate cards
+      cardElements.forEach((card, index) => {
+        const cardInner = card.querySelector(".card-inner");
+        if (!cardInner) return;
+
+        // Pin each card except the last one
+        if (index !== cardElements.length - 1) {
+          ScrollTrigger.create({
+            trigger: card,
+            start: "top 20%", // Start pinning when card is near top
+            endTrigger: ".outro",
+            end: "top 80%", // Unpin when outro is near bottom
+            pin: true,
+            pinSpacing: false,
+          });
+        }
+
+        // Smooth y translation for card inner content
+        gsap.fromTo(
+          cardInner,
+          { y: 0 }, // Start at natural position
+          {
+            y: -card.offsetHeight, // Move up based on card height
+            ease: "none",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 20%",
+              endTrigger: ".outro",
+              end: "top 80%",
+              scrub: 1, // Smooth scrubbing with slight delay
+            },
+          }
+        );
+      });
+
+      // Refresh ScrollTrigger after setup
+      ScrollTrigger.refresh();
+
+      return () => {
+        ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      };
+    },
+    { scope: container }
+  );
 
   return (
-    <>
-        <div className="app" ref={container}>
-          <section className="hero">
-            {/* <Image src={HeroImg} width={500} height={500} alt="Hero Image" /> */}
-          </section>
-          <section className="intro"></section>
-          <section className="cards">
-            {cards.map((card) => (
-              <Card key={card.index} {...card} index={card.index}/>
-            ))}
-          </section>
-          <section className="outro">
-            <div className="fnt-1">Filler filler blah blah</div>
-          </section>
-        </div>
-    </>
-  )
+    <div className="app" ref={container}>
+      <section className="hero">
+        <strong className="fnt-1">Projects</strong>
+      </section>
+      <section className="intro"></section>
+      <section className="cards">
+        {cards.map((card) => (
+          <Card key={card.index} {...card} index={card.index} />
+        ))}
+      </section>
+      <section className="outro">
+        <div className="fnt-1">Filler filler blah blah</div>
+      </section>
+    </div>
+  );
 }

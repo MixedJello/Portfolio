@@ -23,8 +23,8 @@
         padding: 2em;
         display: flex;
         gap: 4em;
-        margin-left: 2em;
-        margin-right: 2em;
+        max-width: clamp(70vw, 85rem, 90vw);
+        margin: 0 auto;
 
     }
 
@@ -57,24 +57,28 @@
 
 #card-1 .card-inner {
     background-color: var(--dk-bg);
-    border: 3px solid var(--primary);
-    box-shadow: 0 0 10px #00f0ff, 0 0 20px #00f0ff, 0 0 40px #00f0ff;
+    box-shadow: 0 0 10px #222831, 0 0 20px #222831, 0 0 40px #222831;
+    backdrop-filter: saturate(180%) blur(10px);
+    background: rgba(59, 59, 59, 0.3);
 
 }
 #card-2 .card-inner {
     background-color: var(--dk-bg);
-    border: 3px solid var(--primary);
-    box-shadow: 0 0 10px #00f0ff, 0 0 20px #00f0ff, 0 0 40px #00f0ff;
+    box-shadow: 0 0 10px #222831, 0 0 20px #222831, 0 0 40px #222831;
+    backdrop-filter: saturate(180%) blur(10px);
+    background: rgba(59, 59, 59, 0.53);
 }
 #card-3 .card-inner {
     background-color: var(--dk-bg);
-    border: 3px solid var(--primary);
-    box-shadow: 0 0 10px #00f0ff, 0 0 20px #00f0ff, 0 0 40px #00f0ff;
+    box-shadow: 0 0 10px #222831, 0 0 20px #222831, 0 0 40px #222831;
+    backdrop-filter: saturate(180%) blur(10px);
+    background: rgba(59, 59, 59, 0.53);
 }
 #card-4 .card-inner {
     background-color: var(--dk-bg);
-    border: 3px solid var(--primary);
-    box-shadow: 0 0 10px #00f0ff, 0 0 20px #00f0ff, 0 0 40px #00f0ff;
+    box-shadow: 0 0 10px #222831, 0 0 20px #222831, 0 0 40px #222831;
+    backdrop-filter: saturate(180%) blur(10px);
+    background: rgba(59, 59, 59, 0.53);
 }
 
 @media (max-width: 900px) {

@@ -1,6 +1,7 @@
 .hero, .intro, .outro {
     position: relative;
-    width: 100vw;
+    max-width: clamp(70vw, 85rem, 90vw);
+    margin: 0 auto;
     _height: 100vh;
     padding: 2em;
 }
