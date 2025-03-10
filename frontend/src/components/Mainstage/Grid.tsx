@@ -1,12 +1,12 @@
-"use client"
-import React, { useEffect, useState } from 'react'
+"use client";
+import React, { useEffect, useState } from 'react';
 import { gsap } from "gsap";
-import "@/styles/mainstage/grid.css"
+import "@/styles/mainstage/grid.css";
 
 const useViewportSize = () => {
   const [size, setSize] = useState({
-    width: typeof window !== 'undefined' ? window.innerWidth : 0,
-    height: typeof window !== 'undefined' ? window.innerHeight : 0,
+    width: 0, // Default to 0 for SSR
+    height: 0,
   });
 
   useEffect(() => {
@@ -17,13 +17,13 @@ const useViewportSize = () => {
       });
     };
     
-    handleResize(); // Set initial size
+    handleResize(); // Set initial size on mount
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return size;
-}
+};
 
 export default function Grid() {
   interface GridLine {
@@ -32,9 +32,17 @@ export default function Grid() {
   }
 
   const { width, height } = useViewportSize();
-  const xLinesCount = Math.floor(width / 100);
-  const yLinesCount = Math.floor(height / 50);
-  
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Set isMounted to true after the component mounts on the client
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Calculate line counts only when width and height are valid
+  const xLinesCount = width > 0 ? Math.floor(width / 100) : 0;
+  const yLinesCount = height > 0 ? Math.floor(height / 50) : 0;
+
   const xLines: GridLine[] = Array.from({ length: xLinesCount }, () => ({
     speed: Math.random() * 3 + 2,
     width: 1,
@@ -45,39 +53,34 @@ export default function Grid() {
   }));
 
   useEffect(() => {
-    if (width > 0 && height > 0) { // Only run when we have valid dimensions
-      gsap.fromTo(
-        ".x-line",
-        { opacity: 0, scaleX: 0 },
-        { 
-          opacity: 1, 
-          scaleX: 1, 
-          duration: 10, 
-          stagger: 0.2, 
-          ease: "power2.out",
-          scrollTrigger: { // Add scroll trigger if desired
-            trigger: ".x-line",
-            start: "top bottom",
-          }
-        }
-      );
-      gsap.fromTo(
-        ".y-line",
-        { opacity: 0, scaleY: 0 },
-        { 
-          opacity: 1, 
-          scaleY: 1, 
-          duration: 10, 
-          stagger: 0.2, 
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: ".y-line",
-            start: "top bottom",
-          }
-        }
-      );
-    }
-  }, [width, height]); // Re-run when viewport size changes
+    if (!isMounted || width <= 0 || height <= 0) return; // Skip until mounted and dimensions are valid
+
+    gsap.fromTo(
+      ".x-line",
+      { opacity: 0, scaleX: 0 },
+      { 
+        opacity: 1, 
+        scaleX: 1, 
+        duration: 1, // Reduced for testing; adjust as needed
+        stagger: 0.2, 
+        ease: "power2.out",
+      }
+    );
+    gsap.fromTo(
+      ".y-line",
+      { opacity: 0, scaleY: 0 },
+      { 
+        opacity: 1, 
+        scaleY: 1, 
+        duration: 1, 
+        stagger: 0.2, 
+        ease: "power2.out",
+      }
+    );
+  }, [isMounted, width, height]);
+
+  // Render nothing or a fallback during SSR until mounted
+  if (!isMounted) return null; // Or a loading state like <div>Loading...</div>
 
   return (
     <div className="grid-container">
@@ -90,7 +93,7 @@ export default function Grid() {
             top: `${(index / xLinesCount) * 100}%`,
             height: `${line.width}px`,
             width: '100%',
-            background: '#00f0ff', // Add visible color for testing
+            background: '#00f0ff',
           }}
         />
       ))}
@@ -100,14 +103,14 @@ export default function Grid() {
           className="y-line"
           style={{
             position: 'absolute',
-            opacity: .5,
+            opacity: 0.5,
             left: `${(index / yLinesCount) * 100}%`,
             width: `${line.width}px`,
             height: '100%',
-            background: '#00f0ff', // Add visible color for testing
+            background: '#00f0ff',
           }}
         />
       ))}
     </div>
-  )
+  );
 }

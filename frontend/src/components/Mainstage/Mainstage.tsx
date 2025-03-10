@@ -1,24 +1,18 @@
 import React from 'react'
 import "@/styles/mainstage/mainstage.css"
-import AnimatedCircle from './AnimatedCircle'
-// import Typewriter from './Typewriter'
+import Draggable from "@/components/Mainstage/Draggable"
+
 
 
 export default function Mainstage() {
   return (
-    <section className='mainstage mn-w-wd relative w-full'>
-      <div className=''>
-        <div className='inf relative flex justify-between align-center'>
-          <div className='w-full flex flex-col items-center xl:items-start px-3 py-3'>
-            <em className="fnt-3 pb-5">Hello World! I am</em>
-              <strong className="fnt-big pb-5">Tyler McGue</strong>
-              {/* <Typewriter /> */}
-          </div>
-          <div className='w-full flex justify-center'>
-            <AnimatedCircle />
-          </div>
-        </div>
+    <section className='mainstage mn-w-wd pd_v py-3 relative w-full'>
+      <div className='text-center flex flex-col pb-5'>
+        <em className='fnt-4'>I am</em>
+        <strong className="fnt-big">Tyler McGue</strong>
+        <em className='fnt-4'>Drag titles below </em>
       </div>
+        <Draggable />
     </section>
   )
 }
