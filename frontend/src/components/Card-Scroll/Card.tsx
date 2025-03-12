@@ -5,10 +5,12 @@ import "@/styles/cards/cards.css";
 interface CardProps {
     title: string;
     content: string;
+    language: string[];
+    link: string;
     index: number;
   }
 
- const Card = ({ title, content, index }: CardProps) => {
+ const Card = ({ title, content, index, language, link }: CardProps) => {
   return (
     <div className="card" id={`card-${index + 1}`}>
         <div className="card-inner">
@@ -16,8 +18,17 @@ interface CardProps {
             <div className="fnt-1">{title}</div>
             <p>{content}</p>
           </div>
-          <div className="card-img">
-            <Image src={`/assets/card-${index + 1}.jpg`}  alt={`${title} image`} width={500} height={500} />
+          <div className="card-img flex flex-row flex-wrap w-full">
+            <div className='flex flex-wrap w-full gap-6'>
+              {language.map((item) => (
+                <div key={item}>
+                  <Image src={`/assets/logo/${item}.svg`}  alt={`${item} logo`} width={50} height={50} title={item}/>
+                </div>
+              ))}
+            </div>
+            <div className=''>
+              <a className='btn v1' href={link} target='_blank'>View Project</a>
+            </div>
           </div>
         </div>
       </div>

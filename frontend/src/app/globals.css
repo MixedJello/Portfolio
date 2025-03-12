@@ -11,8 +11,8 @@
 
 /* Variable Controls */
 :root {
-  --btn-v1-pd-y: 1rem;
-  --btn-v1-pd-x: 1.5rem;
+  --btn-v1-pd-y: .75rem;
+  --btn-v1-pd-x: .75rem;
 
   --btn-trn-sp: 0.3s;
   --btn-trn-tf: ease;
@@ -69,13 +69,19 @@
   --trn-sp: .3s;
   --trn-tf: ease;
 
-
+  --g-cnt-ttl-cnt-m: 1rem
 }
 
 /* General CSS o7 */
 
 #HeaderZone {
   padding-bottom: 3rem;
+}
+
+.cnt {
+  :is(p, ol, ul) {
+    margin-block: var(--g-cnt-ttl-cnt-m)
+  }
 }
 
 .sec-nav a, .mn-nav a, .ftr-nav ul a {
@@ -164,15 +170,15 @@ p {
       padding: var(--btn-v1-pd-y) var(--btn-v1-pd-x);
       transition: background-color var(--btn-trn-sp) var(--btn-trn-tf) 0s, color var(--btn-trn-sp) var(--btn-trn-tf) 0s;
       color: var(--text-alt);
-      background-color: var(--buttons);
-      border: 2px solid var(--buttons);
+      background-color: transparent;
+      border: 2px solid var(--primary);
       width: auto;
       margin: 0 auto;
 
       &:is(:hover, :focus) {
-          color: var(--buttons);
-          background-color: var(--white);
-          border: 2px solid var(--buttons)
+          color: var(--black);
+          background-color: var(--primary);
+          border: 2px solid var(--primary)
       }
 
   }

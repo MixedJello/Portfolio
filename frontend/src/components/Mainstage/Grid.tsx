@@ -61,7 +61,7 @@ export default function Grid() {
       { 
         opacity: 1, 
         scaleX: 1, 
-        duration: 1, // Reduced for testing; adjust as needed
+        duration: 10, // Reduced for testing; adjust as needed
         stagger: 0.2, 
         ease: "power2.out",
       }
@@ -72,7 +72,7 @@ export default function Grid() {
       { 
         opacity: 1, 
         scaleY: 1, 
-        duration: 1, 
+        duration: 10, 
         stagger: 0.2, 
         ease: "power2.out",
       }

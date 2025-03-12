@@ -13,21 +13,29 @@ const cards = [
   {
     title: "Style Weaver",
     content: `An application that would accumulate design styles specified within the designed format, Figma, convert it to the code equivalent, and generate a foundational stylesheet for a developer to start a new development on a website, improving efficiency by a minimum of 20%.`,
+    language: ['Csharp', 'Python'],
+    link: 'https://github.com/MixedJello/StyleWeaver',
     index: 0,
   },
   {
     title: "Scrapey",
     content: `An application that automated a process of scraping every single page of a specific client websites with the goal of looking for any JavaScript tags or iframes on the pages, gather that data and generate a CSV file with the element, path to the page, and listed out scripts that were on all pages of a site.`,
+    language: ['Csharp'],
+    link: 'https://github.com/MixedJello/Scrapey/',
     index: 1,
   },
   {
     title: "Aqua-Tots Swim School",
     content: "https://www.aquatotsfranchise.com/ developed this brand specific website using HTML, CSS, JavaScript, and SQL to achieve its complex design",
+    language: ['HTML', 'CSS', 'JavaScript', 'SQL'],
+    link: 'https://www.aquatotsfranchise.com/',
     index: 2,
   },
   {
-    title: "Wow that's a baseball!",
-    content: "Filler filler blah blah",
+    title: "Wind River Environmental",
+    content: "https://www.wrenvironmental.com/ developed this brand specific website using HTML, CSS, JavaScript, and SQL to achieve its complex design",
+    language: ['HTML', 'CSS', 'JavaScript', 'SQL'],
+    link: 'https://www.wrenvironmental.com/',
     index: 3,
   },
 ];
@@ -121,19 +129,18 @@ export default function CardContainer() {
   );
 
   return (
-    <div className="app" ref={container}>
-      <section className="hero">
+    <div id="projects" className="app" ref={container}>
+      <div className="hero text-center">
         <strong className="fnt-1">Projects</strong>
-      </section>
+      </div>
       <section className="intro"></section>
       <section className="cards">
         {cards.map((card) => (
           <Card key={card.index} {...card} index={card.index} />
         ))}
       </section>
-      <section className="outro">
-        <div className="fnt-1">Filler filler blah blah</div>
-      </section>
+      <div className="outro">
+      </div>
     </div>
   );
 }

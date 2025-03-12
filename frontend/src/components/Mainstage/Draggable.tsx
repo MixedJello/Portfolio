@@ -19,7 +19,7 @@ export default function Draggable() {
     'Husband',
     'Dad',
     'Christian',
-    'ADHD Most Likely',
+    'Most Likely Has ADHD',
   ];
 
   useLayoutEffect(() => {

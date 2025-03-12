@@ -2,9 +2,9 @@ import Link from "next/link";
 import React from "react";
 
 const links = [
-  { href: "/", label: "Home" },
-  { href: "/photo-gallery", label: "Photo Gallery" },
-  { href: "/contact-us", label: "Contact Us" },
+  { href: "#top", label: "Home" },
+  { href: "#about", label: "About Me" },
+  { href: "#projects", label: "Projects" },
 ];
 
 const MainNav = () => {
