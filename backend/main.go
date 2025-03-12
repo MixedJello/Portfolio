@@ -1,6 +1,7 @@
 package main
 
 import (
+	"api/email"
 	"fmt"
 	"log"
 	"net/http"
@@ -42,6 +43,31 @@ func initDB() {
 
 }
 
+func sendEmailHandler(c *gin.Context) {
+	var form email.FormData
+	if err := c.ShouldBindBodyWithJSON(&form); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		log.Printf("SMTP_USER or SMTP_PASS not set")
+		return
+	}
+
+	smtpUser := os.Getenv("SMTP_USER")
+	smtpPass := os.Getenv("SMTP_PASS")
+	if smtpUser == "" || smtpPass == "" {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Server configuration error"})
+		log.Println("SMTP_USER or SMTP_PASS not set")
+		return
+	}
+
+	err := email.SendEmail(form, smtpUser, smtpPass)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to send email"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Email sent successfully"})
+}
+
 // main function
 func main() {
 	//initialize db
@@ -57,6 +83,12 @@ func main() {
 		AllowHeaders:     []string{"Origin", "Content-type", "Authorization"},
 		AllowCredentials: true,
 	}))
+
+	api := router.Group("/api")
+	{
+		api.POST("/send-email", sendEmailHandler)
+	}
+
 	router.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"message": "Backend is running!"})
 	})
