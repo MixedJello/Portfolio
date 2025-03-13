@@ -1,6 +1,7 @@
 package email
 
 import (
+	"crypto/tls"
 	"fmt"
 	"log"
 	"net/smtp"
@@ -51,8 +52,12 @@ func SendEmail(form FormData, smtpUser, smtpPass string) error {
 	}
 	defer client.Close()
 
+	tlsConfig := &tls.Config{
+		ServerName: "smtp.gmail.com",
+	}
+
 	//Start TLS (required by Gmail)
-	if err = client.StartTLS(nil); err != nil {
+	if err = client.StartTLS(tlsConfig); err != nil {
 		log.Printf("Failed to start TLS %v", err)
 		return err
 	}
