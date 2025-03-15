@@ -1,8 +1,10 @@
-import React, { FormEvent, useState } from 'react'
+import React, { FormEvent, useEffect, useState } from 'react'
 import axios from 'axios';
 import "@/styles/contactForm/contact.css"
+import MessageStatusModal from './MessageStatusModal';
 
 export default function ContactForm() {
+  //Form State Management
   const [ formData, setFormData ] = useState ({
     firstName: '',
     lastName: '',
@@ -10,17 +12,18 @@ export default function ContactForm() {
     message: '',
   });
 
+  //Status State Management
   const [ isSending, setIsSending] = useState(false)
-
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [number, setNumber] = useState("");
-  const [company, setCompany] = useState("");
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-
   const [ status, setStatus ] = useState('');
+  const [ isMounted, setIsMounted ] = useState(false);
+
+  //Modal State Management
+  const [ modal, setModal ] = useState(true);
+
+  //Ensure component only renders on client after mount
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -50,6 +53,11 @@ export default function ContactForm() {
     setIsSending(false);
   };
 
+  // Prevent rendering until client-side mount to avoid hydration issues
+  if (!isMounted) {
+    return null; // Or <div>Loading...</div> for a placeholder
+  }
+
   return (
     <section className='mn-w-wd contact-form' id='contact'>
       <div className='text-center w-full'>
@@ -77,7 +85,7 @@ export default function ContactForm() {
           <button className='btn v1' type='submit' disabled={isSending}>Send</button>
         </div>
       </form>
-      { status && <p>{status}</p> }
+      { status && <MessageStatusModal visible={modal} setVisibility={setModal} message={status} /> }
     </section>
   )
 }

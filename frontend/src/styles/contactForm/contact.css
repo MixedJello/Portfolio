@@ -15,4 +15,8 @@
     button {
         cursor: pointer;
     }
+    .input-text input:valid,
+    .input-text textarea:valid {
+        border-color: #00ff99;
+    }
 }

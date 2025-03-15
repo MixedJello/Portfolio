@@ -33,8 +33,8 @@ func SendEmail(form FormData, smtpUser, smtpPass string) error {
 			"Last Name: %s\r\n"+
 			"Email: %s\r\n"+
 			"Message: %s\r\n",
+		os.Getenv("SMTP_USER"),
 		os.Getenv("PERSONAL_EMAIL"),
-		form.Email,
 		subject,
 		form.FirstName,
 		form.LastName,

@@ -3,7 +3,14 @@
 
 @font-face {
   font-family: "Orbitron";
-  src: url('/frontend//public/fonts/Orbitron-VariableFont_wght.ttf') format('truetype');
+  src: url('/fonts/Orbitron-VariableFont_wght.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;    
+}
+@font-face {
+  font-family: "Titillium Web";
+  src: url('/fonts/TitilliumWeb-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;    
@@ -76,6 +83,12 @@
 
 #HeaderZone {
   padding-bottom: 3rem;
+}
+
+body {
+  font-family: var(--fnt-m) !important;
+  text-wrap: pretty;
+  padding-bottom: 15rem;
 }
 
 .cnt {

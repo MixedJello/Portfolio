@@ -1,10 +1,12 @@
 "use client";
 
-import Test from "@/components/Test";
+
 import CardContainer from "@/components/Card-Scroll/CardContainer";
 import Mainstage from "@/components/Mainstage/Mainstage";
 import Grid from "@/components/Mainstage/Grid";
 import About from "@/components/About/About";
+import ContactForm from "@/components/Contact/ContactForm";
+import Social from "@/components/Navigation/Footer/Social";
 
 export default function Home() {
 
@@ -14,7 +16,9 @@ export default function Home() {
         <Mainstage />
         <About />
         <CardContainer />
-        <Test />
+        <ContactForm />
+        <Social />
+        
       </>
   );
 }
