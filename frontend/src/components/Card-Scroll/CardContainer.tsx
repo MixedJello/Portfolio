@@ -134,7 +134,7 @@ export default function CardContainer() {
         <strong className="fnt-1">Projects</strong>
       </div>
       <section className="intro"></section>
-      <section className="cards">
+      <section className="cards space-y-30 md:space-y-0">
         {cards.map((card) => (
           <Card key={card.index} {...card} index={card.index} />
         ))}

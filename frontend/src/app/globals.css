@@ -61,7 +61,7 @@
   --fnt-t-2-ls: 0em; 
   --fnt-t-2-w: 400; 
   --fnt-t-2-tt: none; 
-  --fnt-t-2-s: 1.125rem;
+  --fnt-t-2-s: 1.75rem;
   --fnt-t-2-lh: 1.5; 
   --fnt-t-2-s-mtp: 1;
 
@@ -72,6 +72,8 @@
   --fnt-t-3-s: 1.25rem; 
   --fnt-t-3-lh: 1.2; 
   --fnt-t-3-s-mtp: 1;
+
+  --fnt-s: 1.25rem;
 
   --trn-sp: .3s;
   --trn-tf: ease;
@@ -101,18 +103,25 @@ body {
   padding: .75rem .5rem;
 
   &:is(:hover, :focus) {
-      color: var(--primary);
+      color: var(--secondary);
   }
 }
 
 a {
   transition: color var(--trn-sp) var(--trn-tf) 0s;
+  color: var(--primary);
+  &:is(:hover, :focus) {
+    color: var(--secondary);
+  }
 }
 
 body {
   overflow-y: scroll;
   background-color: var(--dk-bg);
   color: var(--text-alt);
+    p {
+      font-size: var(--fnt-s);
+    }
 }
 
 [class*="mn-w"] {

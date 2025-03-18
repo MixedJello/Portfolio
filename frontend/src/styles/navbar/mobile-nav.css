@@ -1,0 +1,10 @@
+.mbl-nav {
+    box-shadow: 0 0 10px #222831, 0 0 20px #222831, 0 0 40px #222831;
+    backdrop-filter: saturate(180%) blur(10px);
+    background: rgba(59, 59, 59, 0.53);
+}
+body:has(header .active) main {
+    z-index: -1;
+    position: relative;
+    opacity: .25;
+}

@@ -1,3 +1,4 @@
+'use client'
 import React, { FormEvent, useEffect, useState } from 'react'
 import axios from 'axios';
 import "@/styles/contactForm/contact.css"
@@ -42,20 +43,20 @@ export default function ContactForm() {
     try {
       const response = await axios.post('http://localhost:8080/api/send-email', formData);
       if (response.status === 200) {
-        setStatus('Message sent successfully!');
+        setStatus(`Message sent successfully!<br/><span class="fnt-2">I will get back to you at my earliest availability.</span> `);
         setFormData({ firstName: '', lastName: '', email: '', message: '' });
       }
     }
     catch (error) {
       console.error('Error sending email: ', error);
-      setStatus('Failed to send message. Please try again');
+      setStatus(`Failed to send message. You can also email me directly here <a href="mailto:tylermcgue@gmail.com">tylermcgue@gmail.com</a>`);
     }
     setIsSending(false);
   };
 
   // Prevent rendering until client-side mount to avoid hydration issues
   if (!isMounted) {
-    return null; // Or <div>Loading...</div> for a placeholder
+    return null; 
   }
 
   return (
@@ -64,16 +65,16 @@ export default function ContactForm() {
         <strong className='fnt-1'>Connect With Me</strong>
       </div>
       <form className='flex flex-wrap justify-center gap-4 py-6' onSubmit={handleSubmit}>
-        <div className='w-1/3 flex flex-col input-text'>
+        <div className='w-full lg:w-1/3 flex flex-col input-text'>
           <label htmlFor='firstName'>First Name:</label>
 
           <input type='text' id='firstName' name='firstName' value={formData.firstName} onChange={handleChange} required />
         </div>
-        <div className='w-1/3 flex flex-col input-text'>
+        <div className='w-full lg:w-1/3 flex flex-col input-text'>
           <label htmlFor='lastName'>Last Name:</label>
           <input type='text' id='lastName' name='lastName' value={formData.lastName} onChange={handleChange} required />
         </div>
-        <div className='w-1/3 flex flex-col input-text'>
+        <div className='w-full lg:w-1/3 flex flex-col input-text'>
           <label htmlFor='email'>Email:</label>
           <input type='email' id='email' name='email' value={formData.email} onChange={handleChange} required />
         </div>

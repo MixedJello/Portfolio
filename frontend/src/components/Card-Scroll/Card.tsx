@@ -14,14 +14,14 @@ interface CardProps {
   return (
     <div className="card" id={`card-${index + 1}`}>
         <div className="card-inner">
-          <div className="card-content">
+          <div className="card-content pb-3">
             <div className="fnt-1">{title}</div>
             <p>{content}</p>
           </div>
-          <div className="card-img flex flex-row flex-wrap w-full">
-            <div className='flex flex-wrap w-full gap-6'>
+          <div className="card-img flex flex-row flex-wrap gap-6">
+            <div className='flex flex-wrap lg:w-full gap-6'>
               {language.map((item) => (
-                <div key={item}>
+                <div className='h-fit' key={item}>
                   <Image src={`/assets/logo/${item}.svg`}  alt={`${item} logo`} width={50} height={50} title={item}/>
                 </div>
               ))}

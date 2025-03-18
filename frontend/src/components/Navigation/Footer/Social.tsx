@@ -27,9 +27,9 @@ export default function Social() {
 ]
 
   return (
-    <section className='social flex flex-row justify-center gap-4'>
+    <section className='social flex flex-row justify-center gap-4 pt-3'>
       {socialMedias.map((sm) => (
-        <a className="w-1/2" key={sm.platform} href={sm.link} target='_blank'>{sm.icon}</a>
+        <a className=" w-1/6 xl:w-1/2" key={sm.platform} href={sm.link} target='_blank'>{sm.icon}</a>
       ))}
     </section>
   )

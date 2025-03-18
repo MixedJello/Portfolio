@@ -1,0 +1,12 @@
+.modal-container {
+    max-width: 50vw;
+    box-shadow: 0 0 10px #222831, 0 0 20px #222831, 0 0 40px #222831;
+    backdrop-filter: saturate(180%) blur(10px);
+    background: rgba(39, 39, 39, 0.75);
+    padding: 2rem;
+    text-wrap: pretty;
+
+    svg:is(:hover, :focus) path {
+        fill: #00ff99;
+    }
+}

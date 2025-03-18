@@ -18,7 +18,6 @@
     .card-inner {
         position: relative;
         will-change: transform;
-        /* width: 100%; */
         height: 100%;
         padding: 2em;
         display: flex;
@@ -30,13 +29,6 @@
 
     .card-content {
         flex: 3;
-    }
-
-    .card-img {
-        flex: 1;
-        aspect-ratio: 16/9;
-        border-radius: .75em;
-        overflow: hidden;
     }
 
     img {
@@ -85,10 +77,27 @@
     }
 
     .card-img, .card-content {
-        display: none;
+    }
+    .card .card-inner {
+        display: block;
     }
 
     .card {
-        height: 300px;
+        height: auto;
+    }
+
+    .card, .cards {
+        min-height: 100% !important;
+    }
+    .card {
+        max-height: 50% !important;
+
+        .card-inner {
+            max-height: fit-content;
+        }
+    }
+
+    .card div {
+        height: fit-content;
     }
 }
