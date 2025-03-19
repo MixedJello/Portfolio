@@ -154,15 +154,16 @@ export default function Draggable() {
       });
     });
 
+    //Move objects back onto canvas if they are outside it's bounds
     Matter.Events.on(engine, 'beforeUpdate', () => {
       wordBodies.forEach((body) => {
-        if (body.position.x < wallThickness)
+        if (body.position.x < wallThickness) //Left Wall Check
           Matter.Body.setPosition(body, {x: wallThickness, y: body.position.y})
-        if (body.position.x > canvasWidth - wallThickness)
+        if (body.position.x > canvasWidth + wallThickness) //Right Wall check
           Matter.Body.setPosition(body, {x: canvasWidth - wallThickness, y: body.position.y})
-        // if (body.position.y > canvasHeight - wallThickness - 5)
-        //   Matter.Body.setPosition(body, {x: body.position.x, y: canvasHeight - wallThickness})
-        if (body.position.y < wallThickness)
+        if (body.position.y > canvasHeight + wallThickness) //Ground Check
+          Matter.Body.setPosition(body, {x: body.position.x, y: canvasHeight - wallThickness})
+        if (body.position.y < 0) //Roof Check
           Matter.Body.setPosition(body, {x: body.position.x, y: wallThickness})
       })
     })

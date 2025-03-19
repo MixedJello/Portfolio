@@ -11,32 +11,39 @@ gsap.registerPlugin(ScrollTrigger);
 
 const cards = [
   {
+    title: "This Site",
+    content: `I developed a dynamic portfolio website to showcase my technical and creative skills, leveraging a modern tech stack of Next.js, Go, and PostgreSQL. The site features an engaging, interactive experience with Matter.js, a physics engine that powers playful, physics-based animations, demonstrating my ability to blend creativity with functionality. On the backend, I implemented a custom email server in Go, complete with SMTP integration to send autoresponder emails, which added both a practical feature and an enjoyable challenge to the project. This combination of frontend innovation, backend robustness, and database efficiency highlights my versatility as a full-stack developer.`,
+    language: ['Nextjs', 'Go', 'Postgresql'],
+    link: 'https://github.com/MixedJello/Portfolio',
+    index: 0,
+  },
+  {
     title: "Style Weaver",
     content: `An application that would accumulate design styles specified within the designed format, Figma, convert it to the code equivalent, and generate a foundational stylesheet for a developer to start a new development on a website, improving efficiency by a minimum of 20%.`,
     language: ['Csharp', 'Python'],
     link: 'https://github.com/MixedJello/StyleWeaver',
-    index: 0,
+    index: 1,
   },
   {
     title: "Scrapey",
     content: `An application that automated a process of scraping every single page of a specific client websites with the goal of looking for any JavaScript tags or iframes on the pages, gather that data and generate a CSV file with the element, path to the page, and listed out scripts that were on all pages of a site.`,
     language: ['Csharp'],
     link: 'https://github.com/MixedJello/Scrapey/',
-    index: 1,
+    index: 2,
   },
   {
     title: "Aqua-Tots Swim School",
     content: "https://www.aquatotsfranchise.com/ developed this brand specific website using HTML, CSS, JavaScript, and SQL to achieve its complex design",
     language: ['HTML', 'CSS', 'JavaScript', 'SQL'],
     link: 'https://www.aquatotsfranchise.com/',
-    index: 2,
+    index: 3,
   },
   {
     title: "Wind River Environmental",
     content: "https://www.wrenvironmental.com/ developed this brand specific website using HTML, CSS, JavaScript, and SQL to achieve its complex design",
     language: ['HTML', 'CSS', 'JavaScript', 'SQL'],
     link: 'https://www.wrenvironmental.com/',
-    index: 3,
+    index: 4,
   },
 ];
 
