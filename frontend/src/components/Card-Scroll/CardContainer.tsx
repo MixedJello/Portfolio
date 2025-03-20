@@ -12,8 +12,8 @@ gsap.registerPlugin(ScrollTrigger);
 const cards = [
   {
     title: "This Site",
-    content: `I developed a dynamic portfolio website to showcase my technical and creative skills, leveraging a modern tech stack of Next.js, Go, and PostgreSQL. The site features an engaging, interactive experience with Matter.js, a physics engine that powers playful, physics-based animations, demonstrating my ability to blend creativity with functionality. On the backend, I implemented a custom email server in Go, complete with SMTP integration to send autoresponder emails, which added both a practical feature and an enjoyable challenge to the project. This combination of frontend innovation, backend robustness, and database efficiency highlights my versatility as a full-stack developer.`,
-    language: ['Nextjs', 'Go', 'Postgresql'],
+    content: `I developed a dynamic portfolio website to showcase my technical and creative skills, leveraging a modern tech stack of Next.js and Go. The site features an engaging, interactive experience with Matter.js, a physics engine that powers playful, physics-based animations, demonstrating my ability to blend creativity with functionality. On the backend, I implemented a custom email server in Go, complete with SMTP integration to send autoresponder emails, which added both a practical feature and an enjoyable challenge to the project. This combination of frontend innovation and backend robustness highlights my versatility as a full-stack developer.`,
+    language: ['Nextjs', 'Go'],
     link: 'https://github.com/MixedJello/Portfolio',
     index: 0,
   },

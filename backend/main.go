@@ -2,7 +2,6 @@ package main
 
 import (
 	"api/email"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -10,7 +9,6 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
@@ -19,27 +17,11 @@ import (
 var db *gorm.DB
 
 // initialize db
-func initDB() {
+func initENVVar() {
 	err := godotenv.Load("C:\\Users\\tyler\\OneDrive\\Desktop\\Projects\\Portfolio\\.env")
 	if err != nil {
 		log.Fatal("Error loading .env fie. Error message: ", err)
 	}
-
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_NAME"),
-		os.Getenv("DB_PORT"),
-	)
-
-	var errDB error
-	db, errDB = gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if errDB != nil {
-		log.Fatal("Failed to connect to database:", errDB)
-	}
-
-	fmt.Println("Database connected!")
 
 }
 
@@ -70,8 +52,8 @@ func sendEmailHandler(c *gin.Context) {
 
 // main function
 func main() {
-	//initialize db
-	initDB()
+	//initialize env variables
+	initENVVar()
 
 	//Create Router
 	router := gin.Default()

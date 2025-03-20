@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  backend:
+    environment:
+      - GO_ENV=development
+    volumes:
+      - ./backend:/app
+    command: go run main.go
+
+  frontend:
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    command: npm run dev 

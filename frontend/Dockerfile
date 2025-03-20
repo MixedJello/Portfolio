@@ -8,6 +8,9 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
+# Install axios specifically
+RUN npm install axios
+
 # Copy the rest of the application
 COPY . .
 
