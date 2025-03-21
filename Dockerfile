@@ -7,7 +7,7 @@ COPY frontend/ .
 RUN npm run build
 
 # Build backend
-FROM golang:1.21-alpine AS backend-builder
+FROM golang:1.23.4-alpine AS backend-builder
 WORKDIR /app/backend
 
 # Install build dependencies
