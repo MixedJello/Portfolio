@@ -8,6 +8,8 @@ COPY frontend/ .
 RUN npm run build
 # Patch server.js to force 0.0.0.0 binding
 RUN sed -i "s/app.listen(port/app.listen(port, '0.0.0.0'/" .next/standalone/server.js
+# Debug: Output the patched line to verify
+RUN grep "app.listen" .next/standalone/server.js
 
 # Build backend
 FROM golang:1.23.4-alpine AS backend-builder
