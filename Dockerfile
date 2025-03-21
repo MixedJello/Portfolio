@@ -6,52 +6,28 @@ RUN npm install
 RUN npm install axios
 COPY frontend/ .
 RUN npm run build
+# Patch server.js to force 0.0.0.0 binding
+RUN sed -i "s/app.listen(port/app.listen(port, '0.0.0.0'/" .next/standalone/server.js
 
 # Build backend
 FROM golang:1.23.4-alpine AS backend-builder
 WORKDIR /app/backend
-
-# Install build dependencies
 RUN apk add --no-cache gcc musl-dev git
-
-# Copy go.mod and go.sum first
 COPY backend/go.mod backend/go.sum ./
-
-# Download dependencies
 RUN go mod download
-
-# Copy the rest of the backend source code
 COPY backend/ .
-
-# Build the application
 RUN CGO_ENABLED=0 GOOS=linux go build -o main .
 
 # Final stage with Nginx
 FROM nginx:alpine
 WORKDIR /app
-
-# Install Node.js and necessary tools
 RUN apk add --no-cache nodejs npm supervisor tini
-
-# Copy frontend build
 COPY --from=frontend-builder /app/frontend/.next/standalone /app/frontend
 COPY --from=frontend-builder /app/frontend/.next/static /app/frontend/.next/static
 COPY --from=frontend-builder /app/frontend/public /app/frontend/public
-
-# Copy backend binary
 COPY --from=backend-builder /app/backend/main /app/backend/main
-
-# Copy Nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
-
-# Copy supervisor configuration
 COPY supervisord.conf /etc/supervisord.conf
-
-# Expose port
 EXPOSE 80
-
-# Use tini as entrypoint
 ENTRYPOINT ["/sbin/tini", "--"]
-
-# Start supervisor which will manage both frontend and backend
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"] 
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
