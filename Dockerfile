@@ -9,10 +9,20 @@ RUN npm run build
 # Build backend
 FROM golang:1.21-alpine AS backend-builder
 WORKDIR /app/backend
+
+# Install build dependencies
 RUN apk add --no-cache gcc musl-dev git
-COPY backend/go.mod backend/go.sum
+
+# Copy go.mod and go.sum first
+COPY backend/go.mod backend/go.sum ./
+
+# Download dependencies
 RUN go mod download
+
+# Copy the rest of the backend source code
 COPY backend/ .
+
+# Build the application
 RUN CGO_ENABLED=0 GOOS=linux go build -o main .
 
 # Final stage with Nginx
