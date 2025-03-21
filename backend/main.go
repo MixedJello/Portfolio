@@ -16,20 +16,17 @@ import (
 
 var db *gorm.DB
 
-// initialize db
 func initENVVar() {
-	err := godotenv.Load("C:\\Users\\tyler\\OneDrive\\Desktop\\Projects\\Portfolio\\.env")
-	if err != nil {
-		log.Fatal("Error loading .env fie. Error message: ", err)
+	if err := godotenv.Load(); err != nil {
+		log.Println("Warning: .env file not found, using environment variables")
 	}
-
 }
 
 func sendEmailHandler(c *gin.Context) {
 	var form email.FormData
 	if err := c.ShouldBindBodyWithJSON(&form); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
-		log.Printf("SMTP_USER or SMTP_PASS not set")
+		log.Printf("Error binding JSON SMTP User or SMTP Pass not set: %v", err)
 		return
 	}
 
@@ -44,6 +41,7 @@ func sendEmailHandler(c *gin.Context) {
 	err := email.SendEmail(form, smtpUser, smtpPass)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to send email"})
+		log.Printf("Error sending email: %v", err)
 		return
 	}
 
@@ -52,17 +50,17 @@ func sendEmailHandler(c *gin.Context) {
 
 // main function
 func main() {
-	//initialize env variables
+	// initialize env variables
 	initENVVar()
 
-	//Create Router
+	// Create Router
 	router := gin.Default()
 
-	//CORS Configuration
+	// CORS Configuration - simplified for same-origin setup
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowOrigins:     []string{"*"}, // Allow all origins since we're using path-based routing
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-type", "Authorization"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		AllowCredentials: true,
 	}))
 
@@ -74,6 +72,13 @@ func main() {
 	router.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"message": "Backend is running!"})
 	})
-	//run on localhost:8080
-	router.Run(":8080")
+
+	// Get port from environment variable or use default
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8000"
+	}
+
+	log.Printf("Server starting on port %s", port)
+	router.Run(":" + port)
 }

@@ -9,39 +9,34 @@ RUN npm run build
 # Build backend
 FROM golang:1.21-alpine AS backend-builder
 WORKDIR /app/backend
-# Install build dependencies
-RUN apk add --no-cache gcc musl-dev
-# Copy the entire backend directory
+RUN apk add --no-cache gcc musl-dev git
 COPY backend/ .
-# Download dependencies and build
 RUN go mod download && \
-    CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+    CGO_ENABLED=0 GOOS=linux go build -o main .
 
-# Final stage
-FROM alpine:latest
+# Final stage with Nginx
+FROM nginx:alpine
 WORKDIR /app
 
-# Install runtime dependencies
-RUN apk add --no-cache ca-certificates tzdata nodejs npm
+# Install Node.js and necessary tools
+RUN apk add --no-cache nodejs npm supervisor
 
 # Copy frontend build
-COPY --from=frontend-builder /app/frontend/.next/standalone ./frontend
-COPY --from=frontend-builder /app/frontend/.next/static ./frontend/.next/static
-COPY --from=frontend-builder /app/frontend/public ./frontend/public
+COPY --from=frontend-builder /app/frontend/.next/standalone /app/frontend
+COPY --from=frontend-builder /app/frontend/.next/static /app/frontend/.next/static
+COPY --from=frontend-builder /app/frontend/public /app/frontend/public
 
 # Copy backend binary
-COPY --from=backend-builder /app/backend/main ./backend/main
+COPY --from=backend-builder /app/backend/main /app/backend/main
 
-# Create non-root user
-RUN adduser -D -g '' appuser && \
-    chown -R appuser:appuser /app
-USER appuser
+# Copy Nginx configuration
+COPY nginx.conf /etc/nginx/nginx.conf
 
-# Expose ports
+# Copy supervisor configuration
+COPY supervisord.conf /etc/supervisord.conf
+
+# Expose port
 EXPOSE 3000
-EXPOSE 8000
 
-# Copy and set up start script
-COPY start.sh ./
-RUN chmod +x start.sh
-CMD ["./start.sh"] 
+# Start supervisor which will manage both frontend and backend
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"] 
