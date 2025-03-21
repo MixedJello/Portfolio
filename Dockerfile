@@ -31,7 +31,7 @@ FROM nginx:alpine
 WORKDIR /app
 
 # Install Node.js and necessary tools
-RUN apk add --no-cache nodejs npm supervisor
+RUN apk add --no-cache nodejs npm supervisor tini
 
 # Copy frontend build
 COPY --from=frontend-builder /app/frontend/.next/standalone /app/frontend
@@ -49,6 +49,9 @@ COPY supervisord.conf /etc/supervisord.conf
 
 # Expose port
 EXPOSE 80
+
+# Use tini as entrypoint
+ENTRYPOINT ["/sbin/tini", "--"]
 
 # Start supervisor which will manage both frontend and backend
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"] 
