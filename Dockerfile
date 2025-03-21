@@ -48,7 +48,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY supervisord.conf /etc/supervisord.conf
 
 # Expose port
-EXPOSE 3000
+EXPOSE 80
 
 # Start supervisor which will manage both frontend and backend
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"] 
