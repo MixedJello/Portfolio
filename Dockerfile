@@ -6,10 +6,12 @@ RUN npm install
 RUN npm install axios
 COPY frontend/ .
 RUN npm run build
-# Patch server.js to force 0.0.0.0 binding
-RUN sed -i "s/app.listen(port/app.listen(port, '0.0.0.0'/" .next/standalone/server.js
-# Debug: Output the patched line to verify
-RUN grep "app.listen" .next/standalone/server.js
+# Debug: Show the server.js contents
+RUN cat .next/standalone/server.js || echo "server.js not found"
+# Attempt the patch
+RUN sed -i "s/app.listen(port/app.listen(port, '0.0.0.0'/" .next/standalone/server.js || echo "sed failed"
+# Debug: Verify the change
+RUN grep "app.listen" .next/standalone/server.js || echo "No app.listen found after patch"
 
 # Build backend
 FROM golang:1.23.4-alpine AS backend-builder
