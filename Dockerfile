@@ -8,12 +8,13 @@ COPY frontend/ .
 RUN npm run build
 # Debug: Show the server.js contents before patch
 RUN echo "Before patch:" && cat .next/standalone/server.js || echo "server.js not found"
-# Attempt the patch
-RUN sed -i "s/app.listen(port/app.listen(port, '0.0.0.0'/" .next/standalone/server.js || echo "sed failed"
-# Add debug log at the end of server.js
+# Patch startServer to use 0.0.0.0 explicitly
+RUN sed -i "s/hostname,/hostname: '0.0.0.0',/" .next/standalone/server.js || echo "sed failed"
+# Add debug log
 RUN echo "console.log('Frontend binding to ' + process.env.HOST + ':' + process.env.PORT);" >> .next/standalone/server.js
-# Debug: Show the server.js contents after patch
-RUN echo "After patch:" && grep "app.listen" .next/standalone/server.js || echo "No app.listen found after patch"
+# Debug: Verify the change
+RUN echo "After patch:" && grep "startServer" .next/standalone/server.js || echo "No startServer found after patch"
+
 # Build backend
 FROM golang:1.23.4-alpine AS backend-builder
 WORKDIR /app/backend
