@@ -76,7 +76,7 @@ func main() {
 	// Get port from environment variable or use default
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8000"
+		log.Fatal("Port is an empty string")
 	}
 
 	log.Printf("Server starting on port %s", port)
