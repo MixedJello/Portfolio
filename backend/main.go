@@ -74,7 +74,7 @@ func main() {
 	})
 
 	// Get port from environment variable or use default
-	port := os.Getenv("PORT")
+	port := os.Getenv("BACKEND_PORT")
 	if port == "" {
 		log.Fatal("Port is an empty string")
 	}
