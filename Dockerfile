@@ -32,6 +32,6 @@ COPY --from=frontend-builder /app/frontend/public /app/frontend/public
 COPY --from=backend-builder /app/backend/main /app/backend/main
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY supervisord.conf /etc/supervisord.conf
-EXPOSE 80
+EXPOSE 8080
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
