@@ -20,7 +20,7 @@ const cards = [
   {
     title: "Style Weaver",
     content: `An application that would accumulate design styles specified within the designed format, Figma, convert it to the code equivalent, and generate a foundational stylesheet for a developer to start a new development on a website, improving efficiency by a minimum of 20%.`,
-    language: ['Csharp', 'Python'],
+    language: ['Csharp', 'python'],
     link: 'https://github.com/MixedJello/StyleWeaver',
     index: 1,
   },
@@ -34,14 +34,14 @@ const cards = [
   {
     title: "Aqua-Tots Swim School",
     content: "https://www.aquatotsfranchise.com/ developed this brand specific website using HTML, CSS, JavaScript, and SQL to achieve its complex design",
-    language: ['HTML', 'CSS', 'JavaScript', 'SQL'],
+    language: ['html', 'css', 'javascript', 'sql'],
     link: 'https://www.aquatotsfranchise.com/',
     index: 3,
   },
   {
     title: "Wind River Environmental",
     content: "https://www.wrenvironmental.com/ developed this brand specific website using HTML, CSS, JavaScript, and SQL to achieve its complex design",
-    language: ['HTML', 'CSS', 'JavaScript', 'SQL'],
+    language: ['html', 'css', 'javascript', 'sql'],
     link: 'https://www.wrenvironmental.com/',
     index: 4,
   },
