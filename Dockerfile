@@ -6,13 +6,14 @@ RUN npm install
 RUN npm install axios
 COPY frontend/ .
 RUN npm run build
-# Debug: Show the server.js contents
-RUN cat .next/standalone/server.js || echo "server.js not found"
+# Debug: Show the server.js contents before patch
+RUN echo "Before patch:" && cat .next/standalone/server.js || echo "server.js not found"
 # Attempt the patch
 RUN sed -i "s/app.listen(port/app.listen(port, '0.0.0.0'/" .next/standalone/server.js || echo "sed failed"
-# Debug: Verify the change
-RUN grep "app.listen" .next/standalone/server.js || echo "No app.listen found after patch"
-
+# Add debug log at the end of server.js
+RUN echo "console.log('Frontend binding to ' + process.env.HOST + ':' + process.env.PORT);" >> .next/standalone/server.js
+# Debug: Show the server.js contents after patch
+RUN echo "After patch:" && grep "app.listen" .next/standalone/server.js || echo "No app.listen found after patch"
 # Build backend
 FROM golang:1.23.4-alpine AS backend-builder
 WORKDIR /app/backend
