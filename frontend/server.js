@@ -12,18 +12,26 @@ const app = next({
 const handle = app.getRequestHandler();
 
 async function start() {
-    await app.prepare().then(() => {
-        createHttpServer((req, res) => {
-            const parsedUrl = parse(req.url, true);
-            handle(req, res, parsedUrl);
-        }).listen(port, hostname, (err) => {
-            if (err) throw err;
-            console.log(`Next.js running on ${hostname}:${port}`);
-        })
-    })
-}
+    try {
+    await app.prepare();
+    const server = createHttpServer((req, res) => {
+        console.log(`Handling request: ${req.url}`);
+        const parsedUrl = parse(req.url, true);
+        handle(req, res, parsedUrl).catch((err) => {
+            console.error(`Request error: ${err}`);
+            res.statusCode = 500;
+            res.end('Internal Server Error');
+        });
+        });
+        server.listen(port, hostname, (err) => {
+        if (err) throw err;
+        console.log(`Next.js running on ${hostname}:${port}`);
+        });
+        server.on('error', (err) => console.error(`Server error: ${err}`));
+    } catch (err) {
+        console.error(`Startup error: ${err}`);
+        process.exit(1);
+    }
+    }
 
-start().catch((err) => {
-    console.error(err);
-    process.exit(1);
-})
+start();
