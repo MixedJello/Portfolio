@@ -19,9 +19,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o main .
 FROM nginx:alpine
 WORKDIR /app
 RUN apk add --no-cache nodejs npm supervisor tini
-COPY --from=frontend-builder /app/frontend/.next/standalone /app/frontend
-COPY --from=frontend-builder /app/frontend/.next/static /app/frontend/.next/static
-COPY --from=frontend-builder /app/frontend/public /app/frontend/public
+COPY --from=frontend-builder /app/frontend /app/frontend
 COPY --from=backend-builder /app/backend/main /app/backend/main
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY supervisord.conf /etc/supervisord.conf
