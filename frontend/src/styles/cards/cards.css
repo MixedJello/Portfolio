@@ -73,6 +73,7 @@
         }
         .card-inner {
             max-height: fit-content;
+            display:block;
         }
         div {
             height: fit-content;
