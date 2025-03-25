@@ -26,7 +26,7 @@ interface CardProps {
                 </div>
               ))}
             </div>
-            <div className=''>
+            <div className='my-4 lg:my-0'>
               <a className='btn v1' href={link} target='_blank'>View Project</a>
             </div>
           </div>
