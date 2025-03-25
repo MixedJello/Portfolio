@@ -18,7 +18,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o main .
 # Final stage with Nginx
 FROM nginx:alpine
 WORKDIR /app
-RUN apk add --no-cache nodejs npm supervisor tini
+RUN apk add --no-cache nodejs npm supervisor tini netcat-openbsd
 COPY --from=frontend-builder /app/frontend /app/frontend
 COPY --from=backend-builder /app/backend/main /app/backend/main
 COPY nginx.conf /etc/nginx/nginx.conf

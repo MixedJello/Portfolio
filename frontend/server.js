@@ -1,6 +1,6 @@
 import next from 'next';
 import { parse } from 'url';
-import { createServer as createHttpServer } from'https';
+import { createServer as createHttpServer } from'http';
 
 const port = process.env.FRONTEND_PORT || 3000;
 const hostname = '0.0.0.0';
