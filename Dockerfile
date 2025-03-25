@@ -1,19 +1,12 @@
 # Build frontend
-FROM node:20-alpine AS frontend-builder
+FROM node:20-alpine
 WORKDIR /app/frontend
 COPY frontend/package*.json ./
 RUN npm install
-RUN npm install axios
 COPY frontend/ .
 RUN npm run build
-# Debug: Show the server.js contents before patch
-RUN echo "Before patch:" && cat .next/standalone/server.js || echo "server.js not found"
-# Patch startServer to use 0.0.0.0 explicitly
-RUN sed -i "s/hostname,/hostname: '0.0.0.0',/" .next/standalone/server.js || echo "sed failed"
-# Add debug log
-RUN echo "console.log('Frontend binding to ' + process.env.HOST + ':' + process.env.PORT);" >> .next/standalone/server.js
-# Debug: Verify the change
-RUN echo "After patch:" && grep "startServer" .next/standalone/server.js || echo "No startServer found after patch"
+CMD ["npm", "start"]
+EXPOSE 3000
 
 # Build backend
 FROM golang:1.23.4-alpine AS backend-builder
