@@ -2,11 +2,9 @@
 FROM node:20-alpine AS frontend-builder
 WORKDIR /app/frontend
 COPY frontend/package*.json ./
-RUN npm install
-COPY frontend/ .
+RUN npm install  
+COPY frontend/ .  
 RUN npm run build
-CMD ["npm", "start"]
-EXPOSE 3000
 
 # Build backend
 FROM golang:1.23.4-alpine AS backend-builder
