@@ -54,6 +54,8 @@ func main() {
 	// initialize env variables
 	initENVVar()
 
+	ping.SetInterval(14)
+
 	// Create Router
 	router := gin.Default()
 
@@ -83,5 +85,4 @@ func main() {
 	log.Printf("Server starting on port %s", port)
 	router.Run(":" + port)
 
-	ping.SetInterval(14)
 }
