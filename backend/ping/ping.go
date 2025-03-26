@@ -12,12 +12,15 @@ func KeepAlive() {
 	if err != nil {
 		log.Printf("Error getting %s. Error: %s. Response: %s", url, err, res.Status)
 	}
+
+	defer res.Body.Close()
+
 	log.Printf("Pinged server at %s.\n Response: %s", time.Now().String(), res.Status)
 }
 
 func SetInterval(min int) {
 	interval := min * 60 * 1000
-	ticker := time.NewTicker(time.Duration(interval))
+	ticker := time.NewTicker(time.Duration(interval) * time.Minute)
 
 	for t := range ticker.C {
 		KeepAlive()
