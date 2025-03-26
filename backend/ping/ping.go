@@ -19,8 +19,7 @@ func KeepAlive() {
 }
 
 func SetInterval(min int) {
-	interval := min * 60 * 1000
-	ticker := time.NewTicker(time.Duration(interval) * time.Minute)
+	ticker := time.NewTicker(time.Duration(min) * time.Minute)
 
 	for t := range ticker.C {
 		KeepAlive()
