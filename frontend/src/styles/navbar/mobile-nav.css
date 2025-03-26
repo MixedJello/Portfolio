@@ -2,7 +2,21 @@
     box-shadow: 0 0 10px #222831, 0 0 20px #222831, 0 0 40px #222831;
     backdrop-filter: saturate(180%) blur(10px);
     background: rgba(59, 59, 59, 0.53);
+
 }
+
+.opn-icn, .cls-icn {
+    box-shadow: none;
+    background: none;
+    backdrop-filter: none;
+    width: 2.5rem;
+    fill: #00f0ff;
+
+    &:is(:hover, :focus) {
+        fill: #00ff99;
+    }
+}
+
 body:has(header .active) main {
     z-index: -1;
     position: relative;

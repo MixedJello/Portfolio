@@ -6,8 +6,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
-	"sync/atomic"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -18,23 +16,11 @@ import (
 //go mod tidy incase imports get funky
 
 var db *gorm.DB
-var activeRequests int32
 
 func initENVVar() {
 	if err := godotenv.Load(); err != nil {
 		log.Println("Warning: .env file not found, using environment variables")
 	}
-}
-
-func trackRequest() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		atomic.AddInt32(&activeRequests, 1) //Increments for each active request
-		log.Printf("Active Users: %s", strconv.Itoa(int(activeRequests)))
-		defer atomic.AddInt32(&activeRequests, -1) //Decrements after the request is done
-
-		c.Next() //Continues with the request
-	}
-
 }
 
 func sendEmailHandler(c *gin.Context) {
@@ -70,10 +56,6 @@ func main() {
 
 	// Create Router
 	router := gin.Default()
-	router.Use(trackRequest()) //Tracking Number of Users
-	if activeRequests <= 0 {
-		ping.SetInterval(14)
-	}
 
 	// CORS Configuration - simplified for same-origin setup
 	router.Use(cors.New(cors.Config{
@@ -100,4 +82,6 @@ func main() {
 
 	log.Printf("Server starting on port %s", port)
 	router.Run(":" + port)
+
+	ping.SetInterval(14)
 }
