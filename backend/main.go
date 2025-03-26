@@ -2,6 +2,7 @@ package main
 
 import (
 	"api/email"
+	"api/ping"
 	"log"
 	"net/http"
 	"os"
@@ -52,6 +53,7 @@ func sendEmailHandler(c *gin.Context) {
 func main() {
 	// initialize env variables
 	initENVVar()
+	ping.SetInterval(14)
 
 	// Create Router
 	router := gin.Default()
