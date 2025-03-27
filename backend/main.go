@@ -10,12 +10,9 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"gorm.io/gorm"
 )
 
 //go mod tidy incase imports get funky
-
-var db *gorm.DB
 
 func initENVVar() {
 	if err := godotenv.Load(); err != nil {
@@ -54,7 +51,7 @@ func main() {
 	// initialize env variables
 	initENVVar()
 
-	ping.SetInterval(14)
+	ping.SetInterval(10)
 
 	// Create Router
 	router := gin.Default()
