@@ -51,7 +51,7 @@ func main() {
 	// initialize env variables
 	initENVVar()
 
-	ping.SetInterval(10)
+	go ping.SetInterval(10)
 
 	// Create Router
 	router := gin.Default()
