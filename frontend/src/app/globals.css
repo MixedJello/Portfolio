@@ -83,6 +83,7 @@
 
 /* General CSS o7 */
 
+
 #HeaderZone {
   padding-bottom: 3rem;
 }
@@ -225,6 +226,12 @@ p {
   #HeaderZone {
     display: flex;
     justify-content: center;
+  }
+
+}
+@media screen and (max-width: 1279px) {
+  .draggable {
+    touch-action: none;
   }
 
 }
