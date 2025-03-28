@@ -10,3 +10,9 @@
         fill: #00ff99;
     }
 }
+
+@media screen and (max-width: 700px) {
+    .modal-container {
+        max-width: 85vw;
+    }
+}

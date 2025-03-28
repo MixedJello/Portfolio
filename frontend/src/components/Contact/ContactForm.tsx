@@ -43,7 +43,7 @@ export default function ContactForm() {
     try {
       const response = await axios.post('/api/send-email', formData);
       if (response.status === 200) {
-        setStatus(`Message sent successfully!<br/><span class="fnt-2">I will get back to you at my earliest availability.</span> `);
+        setStatus(`Message sent!<br/><span class="fnt-2">I will get back to you at my earliest availability.</span> `);
         setFormData({ firstName: '', lastName: '', email: '', message: '' });
       }
     }
