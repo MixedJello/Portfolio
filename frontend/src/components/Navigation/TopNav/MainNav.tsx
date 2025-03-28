@@ -1,8 +1,9 @@
 import Link from "next/link";
 import React from "react";
 
+
 const links = [
-  { href: "#top", label: "Home" },
+  { href: "/assets/documents/Resume-2-27-2025.pdf", label: "Resume" },
   { href: "#AboutMe", label: "About Me" },
   { href: "#projects", label: "Projects" },
   { href: "#contact", label: "Contact Me" },

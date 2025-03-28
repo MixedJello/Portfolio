@@ -13,13 +13,13 @@ export default function Draggable() {
   const engineRef = useRef<Matter.Engine | null>(null);
   const renderRef = useRef<Matter.Render | null>(null);
   const words = [
+    'Dad',
+    'Husband',
     'Software Engineer',
     'Backend Developer',
     'FullStack Developer',
-    'Husband',
-    'Dad',
-    'Christian',
     'Most Likely Has ADHD',
+    'Christian',
   ];
 
   useLayoutEffect(() => {

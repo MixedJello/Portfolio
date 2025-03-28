@@ -13,6 +13,7 @@ export default function About() {
             </p>
             <p>Solving problems with creative ideas is what I thrive on. Whether I am building applications that improve efficiencies or crafting client websites, my passion is the ever-present challenging aspect programming brings.</p>
             <p>When I&apos;m not coding, you can find me exploring new technologies, refining my craft, or enjoying time with my family. Let&apos;s connect&#8213;I&apos;d love to be apart of any new exciting opportunities!</p>
+            <a className='btn v1' href="/assets/documents/Resume-2-27-2025.pdf" target='_blank'>View My Resume</a>
         </div>
     </section>
   )
