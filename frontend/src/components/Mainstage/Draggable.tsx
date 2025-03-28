@@ -154,6 +154,18 @@ export default function Draggable() {
       });
     });
 
+    const canvas = canvasRef.current;
+    const handleTouch = (e: TouchEvent) => {
+      console.log("Touch Event:", e.type);
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    canvas.addEventListener('touchstart', handleTouch, { passive: false });
+    canvas.addEventListener('touchmove', handleTouch, { passive: false });
+    canvas.addEventListener('touchend', handleTouch, { passive: false });
+    canvas.addEventListener('touchcancel', handleTouch, { passive: false });
+
     //Move objects back onto canvas if they are outside it's bounds
     Matter.Events.on(engine, 'beforeUpdate', () => {
       wordBodies.forEach((body) => {
@@ -177,6 +189,10 @@ export default function Draggable() {
       Render.stop(render);
       Composite.clear(engine.world, false);
       Engine.clear(engine);
+      canvas.removeEventListener('touchstart', handleTouch);
+      canvas.removeEventListener('touchmove', handleTouch);
+      canvas.removeEventListener('touchend', handleTouch);
+      canvas.removeEventListener('touchcancel', handleTouch);
       render.canvas.remove();
     };
   }, []);
