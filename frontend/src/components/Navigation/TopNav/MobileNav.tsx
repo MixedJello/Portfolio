@@ -50,7 +50,7 @@ const MobileNav = ({ setNavbar, navbar }: Props) => {
             navbar ? "opacity-100 active" : "opacity-0 pointer-events-none"
           }`}
         >
-          <div className={`fixed top-20 right-0 w-150 h-auto mbl-nav shadow-lg transform transition-transform duration-300 flex flex-col items-center ${
+          <div className={`fixed top-20 right-0 w-3/4 h-auto mbl-nav shadow-lg transform transition-transform duration-300 flex flex-col items-center ${
             navbar ? "translate-x-0 block" : "translate-x-full hidden"
           }`}>
             {mobileLinks.map((link) => (
