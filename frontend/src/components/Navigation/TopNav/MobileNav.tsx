@@ -50,12 +50,12 @@ const MobileNav = ({ setNavbar, navbar }: Props) => {
             navbar ? "opacity-100 active" : "opacity-0 pointer-events-none"
           }`}
         >
-          <div className={`fixed top-20 right-0 w-1/3 h-auto mbl-nav shadow-lg transform transition-transform duration-300 flex flex-col items-end ${
+          <div className={`fixed top-20 right-0 w-150 h-auto mbl-nav shadow-lg transform transition-transform duration-300 flex flex-col items-center ${
             navbar ? "translate-x-0 block" : "translate-x-full hidden"
           }`}>
             {mobileLinks.map((link) => (
               <Link
-                className="px-6 py-6"
+                className="px-6 py-6 flex items-center"
                 href={link.href}
                 key={link.href}
                 onClick={() => setNavbar((navbar = false))}
