@@ -1,7 +1,13 @@
 .mbl-nav {
     box-shadow: 0 0 10px #222831, 0 0 20px #222831, 0 0 40px #222831;
     backdrop-filter: saturate(180%) blur(10px);
-    background: rgba(59, 59, 59, 0.53);
+    background: rgba(10, 10, 10, 0.75);
+
+    a {
+        border: 1px solid #12888f;
+        width: 100%;
+        justify-content: center;
+    }
 
 }
 

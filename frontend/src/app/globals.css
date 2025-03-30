@@ -235,3 +235,9 @@ p {
   }
 
 }
+
+@media screen and (max-width: 900px) {
+  :root {
+    --fnt-t-1-s-mtp: .75;
+  }
+}

@@ -99,7 +99,7 @@ export default function CardContainer() {
         if (index !== cardElements.length - 1) {
           ScrollTrigger.create({
             trigger: card,
-            start: "top 20%", // Start pinning when card is near top
+            start: "top 10%", // Start pinning when card is near top
             endTrigger: ".outro",
             end: "top 80%", // Unpin when outro is near bottom
             pin: true,
@@ -116,7 +116,7 @@ export default function CardContainer() {
             ease: "none",
             scrollTrigger: {
               trigger: card,
-              start: "top 20%",
+              start: "top 10%",
               endTrigger: ".outro",
               end: "top 80%",
               scrub: 1, // Smooth scrubbing with slight delay
