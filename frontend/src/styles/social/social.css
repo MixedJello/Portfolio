@@ -1,6 +1,10 @@
 .social {
     max-width: 10vw;
     margin: 0 auto;
+
+    path:first-child {
+        fill: currentColor;
+    }
 }
 
 
