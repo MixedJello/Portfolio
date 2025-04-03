@@ -9,11 +9,21 @@ export default function About() {
                 Hello World!
             </p>
             <p>
-                I am Tyler McGue, a passionate engineer and creative problem-solver based in the Greater Los Angeles area of California. I didn&apos;t find my passion for tech until after I graduated college, so don&apos;t be so jealous of my BA in History, resulting in my self-taught journey in the exciting field of tech. Due to my unique career path, I bring a one-of-a-kind perspective to technology, blending analytical thinking with a curiosity of how things work. Over the years, I&apos;ve honed my technical expertise in languages and frameworks like Python, C#, Django, React/Next.js, JavaScript, and SQL, while delivering innovative, user-focused solutions. 
+              I&apos;m Tyler McGue, a software engineer and problem-solver based in the Greater Los Angeles area. My journey into tech was unconventional&mdash;I hold a BA in History but quickly transitioned into software development through self-teaching and hands-on projects. This unique path allows me to approach problems with a fresh perspective, blending analytical thinking with curiosity-driven engineering.
             </p>
-            <p>Solving problems with creative ideas is what I thrive on. Whether I am building applications that improve efficiencies or crafting client websites, my passion is the ever-present challenging aspect programming brings.</p>
-            <p>When I&apos;m not coding, you can find me exploring new technologies, refining my craft, or enjoying time with my family. Let&apos;s connect&#8213;I&apos;d love to be apart of any new exciting opportunities!</p>
-            <a className='btn v1' href="/assets/documents/Resume-2-27-2025.pdf" target='_blank'>View My Resume</a>
+
+            <p>
+                Over the years, I&apos;ve built and optimized <strong>12+ web applications</strong>, automated workflows saving <strong>80+ labor hours per project</strong>, and developed solutions that enhance efficiency by <strong>20% or more</strong>. My technical expertise spans <strong>Python, C#, Django, React/Next.js, JavaScript, SQL, and more</strong>, enabling me to create scalable, high-performance applications.
+            </p>
+
+            <p>
+                Whether I&apos;m designing applications that improve productivity, automating processes, or crafting dynamic user experiences, I thrive on tackling complex challenges with creative solutions.
+            </p>
+
+            <p>
+                When I&apos;m not coding, I&apos;m exploring emerging technologies, refining my skills, or spending time with family. Let&apos;s connect&mdash;I&apos;d love to collaborate on exciting opportunities!
+            </p>
+            <a className='btn v1' href="/assets/documents/Resume422025updated.pdf" target='_blank'>View My Resume</a>
         </div>
     </section>
   )

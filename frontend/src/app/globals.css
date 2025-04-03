@@ -83,6 +83,9 @@
 
 /* General CSS o7 */
 
+html {
+  scroll-behavior: smooth;
+}
 
 #HeaderZone {
   padding-bottom: 3rem;
