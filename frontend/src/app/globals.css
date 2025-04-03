@@ -225,6 +225,19 @@ p {
   }
 }
 
+.pill-bg {
+  box-shadow: 0 0 10px var(--secondary), 0 0 20px var(--secondary), 0 0 40px var(--secondary);
+  backdrop-filter: saturate(180%) blur(5px);
+  background-color: var(--secondary);
+  color: var(--black);
+  border-bottom-left-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+  padding: .5rem 1rem;
+  width: fit-content;
+}
+
 @media screen and (min-width: 1280px) {
   #HeaderZone {
     display: flex;
