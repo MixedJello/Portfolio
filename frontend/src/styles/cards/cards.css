@@ -53,7 +53,7 @@
     background-color: var(--dk-bg);
     box-shadow: 0 0 10px #222831, 0 0 20px #222831, 0 0 40px #222831;
     backdrop-filter: saturate(180%) blur(10px);
-    background: rgba(59, 59, 59, 0.3);
+    background: rgba(0, 0, 0, 0.6);
 
 }
 

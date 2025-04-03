@@ -12,14 +12,14 @@ gsap.registerPlugin(ScrollTrigger);
 const cards = [
   {
     title: "This Site",
-    content: `This website leverages Next.js and Go to showcase all of my projects in one area and to learn about me. This site features an interactive experience with Matter.js which powers physics-based animations, to show my fun creative side. On the backend, I implemented a custom email server in Go, complete with SMTP integration to send autoresponder emails.`,
+    content: `This portfolio website is built with Next.js and Go, providing a central hub for my projects and professional background. It delivers an interactive experience powered by Matter.js, enabling physics-based animations that highlight my creative side. On the backend, I developed a custom email server in Go with SMTP integration, automating autoresponder emails for seamless communication. This implementation improves reliability and reduces dependency on third-party email services.`,
     language: ['Nextjs', 'Go'],
     link: 'https://github.com/MixedJello/Portfolio',
     index: 0,
   },
   {
     title: "Style Weaver",
-    content: `An application that would accumulate design styles specified within the designed format, Figma, convert it to the code equivalent, and generate a foundational stylesheet for a developer to start a new development on a website, improving efficiency by a minimum of 20%.`,
+    content: `Developed an application that extracts design styles from Figma, converts them into structured CSS code, and generates a foundational stylesheet—reducing manual styling efforts and accelerating development startup time by 20% or more. This tool streamlines the design-to-development workflow, ensuring consistency and efficiency across projects.`,
     language: ['Csharp', 'python'],
     link: 'https://github.com/MixedJello/StyleWeaver',
     index: 1,
@@ -33,14 +33,14 @@ const cards = [
   },
   {
     title: "Aqua-Tots Swim School",
-    content: "https://www.aquatotsfranchise.com/ developed this brand specific website using HTML, CSS, JavaScript, and SQL to achieve its complex design",
+    content: "Designed and developed the Aquatots Franchise website (aquatotsfranchise.com) using HTML, CSS, JavaScript, and SQL to deliver a brand-specific, visually engaging, and high-performance web experience. Implemented a custom SQL-driven backend to manage dynamic content efficiently, ensuring scalability and seamless user interactions.",
     language: ['html', 'css', 'javascript', 'sql'],
     link: 'https://www.aquatotsfranchise.com/',
     index: 3,
   },
   {
     title: "Wind River Environmental",
-    content: "https://www.wrenvironmental.com/ developed this brand specific website using HTML, CSS, JavaScript, and SQL to achieve its complex design",
+    content: "Designed and developed the WR Environmental website (wrenvironmental.com) using HTML, CSS, JavaScript, and SQL to create a brand-specific, high-performance digital experience. Built a custom SQL-driven backend to manage dynamic content, ensuring scalability and seamless data handling. Optimized the site's UI/UX and responsiveness, enhancing accessibility across all devices.",
     language: ['html', 'css', 'javascript', 'sql'],
     link: 'https://www.wrenvironmental.com/',
     index: 4,
