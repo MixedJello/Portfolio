@@ -8,8 +8,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 
 export const metadata: Metadata = {
-  title: "Tyler McGue",
-  description: "Insert Job Here",
+  title: "Tyler McGue | Full-Stack Developer | Backend Engineer Portfolio",
+  description: "Full-stack developer showcasing projects built with Next.js, TypeScript, and Go. Explore interactive features powered by GSAP and Matter.js, including animations and a dynamic contact form. Let’s connect for opportunities!",
 };
 
 export default function RootLayout({
