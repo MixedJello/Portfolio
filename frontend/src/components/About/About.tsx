@@ -23,7 +23,7 @@ export default function About() {
             <p>
                 When I&apos;m not coding, I&apos;m exploring emerging technologies, refining my skills, or spending time with family. Let&apos;s connect&mdash;I&apos;d love to collaborate on exciting opportunities!
             </p>
-            <a className='btn v1' href="/assets/documents/Resume422025updated.pdf" target='_blank'>View My Resume</a>
+            <a className='btn v1' href="/assets/documents/resume-02182026.pdf" target='_blank'>View My Resume</a>
         </div>
     </section>
   )

@@ -10,7 +10,7 @@ interface Props {
 }
 
 const mobileLinks = [
-  { href: "/assets/documents/Resume422025updated.pdf", label: "Resume" },
+  { href: "/assets/documents/resume-02182026.pdf", label: "Resume" },
   { href: "#about", label: "About Me" },
   { href: "#skills", label: "Proficiencies" },
   { href: "#projects", label: "Projects" },

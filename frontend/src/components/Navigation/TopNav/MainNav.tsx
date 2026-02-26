@@ -3,7 +3,7 @@ import React from "react";
 
 
 const links = [
-  { href: "/assets/documents/Resume104010022025.pdf", label: "Resume" },
+  { href: "/assets/documents/resume-02182026.pdf", label: "Resume" },
   { href: "#AboutMe", label: "About Me" },
   { href: "#skills", label: "Proficiencies" },
   { href: "#projects", label: "Projects" },
