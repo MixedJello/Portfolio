@@ -49,6 +49,7 @@ func SendEmail(form FormData, smtpUser, smtpPass string) error {
 	client, err := smtp.Dial("smtp.gmail.com:587")
 	if err != nil {
 		log.Printf("Failed to connect to SMTP server: %v", err)
+		return err
 	}
 	defer client.Close()
 
@@ -82,7 +83,7 @@ func SendEmail(form FormData, smtpUser, smtpPass string) error {
 	//Send email body
 	wc, err := client.Data()
 	if err != nil {
-		log.Panicf("Failed to open data connection: %v", err)
+		log.Printf("Failed to open data connection: %v", err)
 		return err
 	}
 	defer wc.Close()

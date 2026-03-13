@@ -47,6 +47,10 @@ const frontend = [
         source: "react",
         title: "React"
     },
+    {
+        source: "Nextjs",
+        title: "Next.js"
+    },
 ]
 
 const devops = [

@@ -11,7 +11,7 @@ interface Props {
 
 const mobileLinks = [
   { href: "/assets/documents/resume-02182026.pdf", label: "Resume" },
-  { href: "#about", label: "About Me" },
+  { href: "#AboutMe", label: "About Me" },
   { href: "#skills", label: "Proficiencies" },
   { href: "#projects", label: "Projects" },
   { href: "#contact", label: "Contact Me" },
@@ -59,7 +59,7 @@ const MobileNav = ({ setNavbar, navbar }: Props) => {
                 className="px-6 py-6 flex items-center"
                 href={link.href}
                 key={link.href}
-                onClick={() => setNavbar((navbar = false))}
+                onClick={() => setNavbar(false)}
               >
                 {link.label}
               </Link>

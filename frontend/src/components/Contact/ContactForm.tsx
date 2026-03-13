@@ -26,11 +26,7 @@ export default function ContactForm() {
     setIsMounted(true);
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-  const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -80,7 +76,7 @@ export default function ContactForm() {
         </div>
         <div className='w-full flex flex-col input-text'>
           <label htmlFor='message'>Message:</label>
-          <textarea id='message' name='message' value={formData.message} onChange={handleTextAreaChange} rows={6} maxLength={5000} required />
+          <textarea id='message' name='message' value={formData.message} onChange={handleChange} rows={6} maxLength={5000} required />
         </div>
         <div>
           <button className='btn v1' type='submit' disabled={isSending}>Send</button>

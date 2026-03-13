@@ -61,7 +61,7 @@ func main() {
 		AllowOrigins:     []string{"*"}, // Allow all origins since we're using path-based routing
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
-		AllowCredentials: true,
+		AllowCredentials: false, // Cannot use wildcard AllowOrigins with credentials=true
 	}))
 
 	api := router.Group("/api")

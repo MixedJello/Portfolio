@@ -3,11 +3,11 @@ import Matter from 'matter-js';
 
 const { Engine, Render, Composite, Bodies, Mouse, MouseConstraint } = Matter;
 
-export default function Draggable() {
-  interface CustomBodyRenderOptions extends Matter.IBodyRenderOptions {
-    text?: string;
-  }
+interface CustomBodyRenderOptions extends Matter.IBodyRenderOptions {
+  text?: string;
+}
 
+export default function Draggable() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const engineRef = useRef<Matter.Engine | null>(null);
@@ -23,9 +23,7 @@ export default function Draggable() {
   ];
 
   useLayoutEffect(() => {
-    console.log('Canvas element:', canvasRef.current);
     if (!containerRef.current || !canvasRef.current) {
-      console.error('Error! containerRef or canvasRef not detected');
       return;
     }
 
@@ -54,7 +52,7 @@ export default function Draggable() {
       },
     });
     renderRef.current = render;
-    
+
     // Create walls aligned with canvas edges
     const walls = [
       // Ground (bottom)
@@ -120,10 +118,8 @@ export default function Draggable() {
     });
 
     Composite.add(engine.world, [...walls, ...wordBodies]);
-    console.log('Bodies added:', engine.world.bodies);
 
     const mouse = Mouse.create(render.canvas);
-    console.log('Mouse created with canvas:', render.canvas);
     const mouseConstraint = MouseConstraint.create(engine, {
       mouse: mouse,
       constraint: {
@@ -133,7 +129,6 @@ export default function Draggable() {
     });
     Composite.add(engine.world, mouseConstraint);
     render.mouse = mouse;
-    console.log('MouseConstraint:', mouseConstraint);
 
     Matter.Events.on(render, 'afterRender', () => {
       const context = render.context;
@@ -156,7 +151,6 @@ export default function Draggable() {
 
     const canvas = canvasRef.current;
     const handleTouch = (e: TouchEvent) => {
-      console.log("Touch Event:", e.type);
       e.preventDefault();
       e.stopPropagation();
     }
