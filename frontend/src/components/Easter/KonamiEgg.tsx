@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import '@/styles/easter/konami.css';
 import '@/styles/easter/fun-mode.css';
+import RedPillMode from '@/components/Easter/RedPillMode';
 
 const KONAMI_SEQUENCE = [
   'ArrowUp', 'ArrowUp',
@@ -18,10 +19,9 @@ const MATRIX_CHARS = '0123456789';
 
 export default function KonamiEgg() {
   const [phase, setPhase] = useState<Phase>('idle');
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const keysRef = useRef<string[]>([]);
+  const canvasRef    = useRef<HTMLCanvasElement>(null);
+  const keysRef      = useRef<string[]>([]);
   const animFrameRef = useRef<number>(0);
-  const storedStylesRef = useRef<Element[]>([]);
 
   // Konami code detection
   useEffect(() => {
@@ -45,21 +45,19 @@ export default function KonamiEgg() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    canvas.width = window.innerWidth;
+    canvas.width  = window.innerWidth;
     canvas.height = window.innerHeight;
 
     const fontSize = 16;
-    const cols = Math.floor(canvas.width / fontSize);
-    const rows = Math.floor(canvas.height / fontSize);
+    const cols     = Math.floor(canvas.width / fontSize);
+    const rows     = Math.floor(canvas.height / fontSize);
 
-    // Start columns at random negative positions so they stagger in
-    const drops = Array.from({ length: cols }, () => Math.floor(Math.random() * -rows));
-    const colDone = new Array<boolean>(cols).fill(false);
-    let doneCols = 0;
+    const drops    = Array.from({ length: cols }, () => Math.floor(Math.random() * -rows));
+    const colDone  = new Array<boolean>(cols).fill(false);
+    let doneCols   = 0;
     const doneThreshold = Math.floor(cols * 0.92);
 
     const tick = () => {
-      // Semi-transparent black to create trail fade
       ctx.fillStyle = 'rgba(0, 0, 0, 0.055)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -68,34 +66,22 @@ export default function KonamiEgg() {
         const xPx = i * fontSize;
         const yPx = y * fontSize;
 
-        // Leading character — bright white
-        ctx.font = `bold ${fontSize}px monospace`;
+        ctx.font      = `bold ${fontSize}px monospace`;
         ctx.fillStyle = '#ffffff';
         ctx.globalAlpha = 1;
-        ctx.fillText(
-          MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)],
-          xPx,
-          yPx
-        );
+        ctx.fillText(MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)], xPx, yPx);
 
-        // Green trail above
         ctx.font = `${fontSize}px monospace`;
         for (let t = 1; t <= 8; t++) {
           const trailYPx = (y - t) * fontSize;
           if (trailYPx < 0) break;
           ctx.globalAlpha = Math.max(0, 1 - t * 0.13);
-          ctx.fillStyle = t <= 2 ? '#88ffaa' : '#00ff41';
-          ctx.fillText(
-            MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)],
-            xPx,
-            trailYPx
-          );
+          ctx.fillStyle   = t <= 2 ? '#88ffaa' : '#00ff41';
+          ctx.fillText(MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)], xPx, trailYPx);
         }
         ctx.globalAlpha = 1;
-
         drops[i]++;
 
-        // Mark column done once head exits bottom, with random chance for stagger
         if (!colDone[i] && yPx > canvas.height && Math.random() > 0.975) {
           colDone[i] = true;
           doneCols++;
@@ -105,7 +91,6 @@ export default function KonamiEgg() {
       if (doneCols < doneThreshold) {
         animFrameRef.current = requestAnimationFrame(tick);
       } else {
-        // Darken to near-black before showing pills
         ctx.fillStyle = 'rgba(0, 0, 0, 0.82)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         setPhase('choice');
@@ -117,12 +102,7 @@ export default function KonamiEgg() {
   }, [phase]);
 
   const handleRedPill = useCallback(() => {
-    // Store every stylesheet and style tag, then remove them
-    const styles = Array.from(
-      document.querySelectorAll<Element>('link[rel="stylesheet"], style')
-    );
-    storedStylesRef.current = styles;
-    styles.forEach((el) => el.parentNode?.removeChild(el));
+    document.documentElement.classList.add('red-pill-mode');
     setPhase('red');
   }, []);
 
@@ -131,9 +111,8 @@ export default function KonamiEgg() {
     setPhase('blue');
   }, []);
 
-  const handleRestore = useCallback(() => {
-    storedStylesRef.current.forEach((el) => document.head.appendChild(el));
-    storedStylesRef.current = [];
+  const handleRestoreRed = useCallback(() => {
+    document.documentElement.classList.remove('red-pill-mode');
     setPhase('idle');
   }, []);
 
@@ -169,7 +148,7 @@ export default function KonamiEgg() {
                 <button className="konami-pill konami-red" onClick={handleRedPill}>
                   <span className="konami-pill-glyph">💊</span>
                   <strong>Red Pill</strong>
-                  <em>See the bare truth</em>
+                  <em>Engineer mode</em>
                 </button>
                 <button className="konami-pill konami-blue" onClick={handleBluePill}>
                   <span className="konami-pill-glyph">💊</span>
@@ -182,31 +161,20 @@ export default function KonamiEgg() {
         </div>
       )}
 
-      {/* Red pill: all CSS stripped — restore button uses only inline styles */}
+      {/* Red pill: engineer mode */}
       {phase === 'red' && (
-        <button
-          onClick={handleRestore}
-          style={{
-            position: 'fixed',
-            bottom: '1rem',
-            right: '1rem',
-            zIndex: 9999,
-            background: '#cc0000',
-            color: '#fff',
-            border: '2px solid #ff4444',
-            padding: '0.5rem 1.1rem',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontFamily: 'monospace',
-            fontSize: '0.875rem',
-            letterSpacing: '0.05em',
-          }}
-        >
-          ← Restore Site
-        </button>
+        <>
+          <RedPillMode />
+          <button
+            className="rp-exit-btn"
+            onClick={handleRestoreRed}
+          >
+            ← Exit Engineer Mode
+          </button>
+        </>
       )}
 
-      {/* Blue pill: fun mode active — exit button */}
+      {/* Blue pill: fun mode */}
       {phase === 'blue' && (
         <button className="konami-exit-fun" onClick={handleExitFun}>
           Exit Fun Mode ✨
