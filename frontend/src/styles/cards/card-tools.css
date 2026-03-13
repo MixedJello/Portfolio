@@ -10,7 +10,7 @@
     padding: 0
 }
 
-.into, .outro {
+.intro, .outro {
     /* background-color: #ffffff; */
     display: flex;
     align-items: center;
@@ -19,7 +19,7 @@
         margin-bottom: 0;
     }
 }
-@media screen and (min-heigh: 900px) {
+@media screen and (min-height: 900px) {
     .card, .cards {
         min-height: 250px !important;
     }
