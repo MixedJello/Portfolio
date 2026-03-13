@@ -1,0 +1,373 @@
+/* ─── Red Pill / Engineer Mode ────────────────────────────────────────────── */
+
+/* Exit button (rendered by KonamiEgg, styled here so it's part of the mode) */
+.rp-exit-btn {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  z-index: 9999;
+  background: rgba(10, 10, 10, 0.88);
+  color: #ff004d;
+  border: 1px solid rgba(255, 0, 77, 0.5);
+  padding: 0.5rem 1.1rem;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  backdrop-filter: blur(8px);
+  transition: background 0.15s, box-shadow 0.15s;
+}
+.rp-exit-btn:hover {
+  background: rgba(255, 0, 77, 0.12);
+  box-shadow: 0 0 14px rgba(255, 0, 77, 0.3);
+}
+
+/* Subtle header badge when engineer mode is active */
+:root.red-pill-mode #HeaderZone::after {
+  content: '[ ENGINEER MODE ]';
+  position: fixed;
+  top: 0.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Courier New', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: rgba(255, 0, 77, 0.6);
+  pointer-events: none;
+  z-index: 9990;
+}
+
+/* ── Physics Panel ─────────────────────────────────────────────────────────── */
+
+.rp-physics-panel {
+  position: fixed;
+  top: 80px;
+  left: 1.25rem;
+  z-index: 8500;
+  background: rgba(10, 10, 10, 0.88);
+  border: 1px solid rgba(255, 0, 77, 0.45);
+  border-radius: 0.6rem;
+  min-width: 220px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(255, 0, 77, 0.15);
+  backdrop-filter: blur(10px);
+  font-family: 'Courier New', monospace;
+  transition: min-width 0.2s ease;
+}
+
+.rp-physics-collapsed {
+  min-width: 0;
+}
+
+.rp-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 0.85rem;
+  border-bottom: 1px solid rgba(255, 0, 77, 0.25);
+  gap: 1rem;
+}
+
+.rp-panel-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #ff004d;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.rp-panel-toggle {
+  background: none;
+  border: none;
+  color: #ff004d;
+  cursor: pointer;
+  font-size: 0.7rem;
+  padding: 0 0.2rem;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+.rp-panel-toggle:hover { opacity: 1; }
+
+.rp-panel-body {
+  padding: 0.75rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.rp-slider-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.rp-slider-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: #aaa;
+}
+
+.rp-slider-val {
+  color: #ff004d;
+  font-weight: 600;
+}
+
+.rp-slider-row input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 0, 77, 0.25);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  border: none;
+}
+.rp-slider-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #ff004d;
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(255, 0, 77, 0.6);
+}
+.rp-slider-row input[type="range"]::-moz-range-thumb {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #ff004d;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(255, 0, 77, 0.6);
+}
+
+/* ── Section hover outline ────────────────────────────────────────────────── */
+
+.rp-hover-target {
+  outline: 2px dashed rgba(255, 0, 77, 0.55) !important;
+  outline-offset: 6px !important;
+}
+
+/* ── Tooltip ──────────────────────────────────────────────────────────────── */
+
+.rp-tooltip {
+  position: fixed;
+  z-index: 9000;
+  pointer-events: none;
+  background: rgba(10, 10, 10, 0.9);
+  border: 1px solid rgba(255, 0, 77, 0.5);
+  border-radius: 0.4rem;
+  padding: 0.3rem 0.65rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.75rem;
+  color: #ccc;
+  white-space: nowrap;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+  animation: rp-tooltip-in 0.15s ease forwards;
+}
+
+@keyframes rp-tooltip-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.rp-tooltip kbd {
+  display: inline-block;
+  background: rgba(255, 0, 77, 0.2);
+  border: 1px solid rgba(255, 0, 77, 0.5);
+  border-radius: 3px;
+  padding: 0 0.3rem;
+  font-family: inherit;
+  font-size: 0.72rem;
+  color: #ff004d;
+  margin: 0 0.1rem;
+}
+
+/* ── Code editor modal ────────────────────────────────────────────────────── */
+
+.rp-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9500;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  animation: rp-modal-fade 0.18s ease forwards;
+}
+
+@keyframes rp-modal-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.rp-code-modal {
+  background: #0d0d0d;
+  border: 1px solid rgba(255, 0, 77, 0.4);
+  border-radius: 0.6rem;
+  width: min(860px, 100%);
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 48px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 0, 77, 0.1);
+  overflow: hidden;
+  animation: rp-modal-slide 0.2s ease forwards;
+}
+
+@keyframes rp-modal-slide {
+  from { transform: translateY(12px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.rp-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid rgba(255, 0, 77, 0.2);
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.rp-modal-id {
+  color: #ff004d;
+  font-size: 0.85rem;
+}
+
+.rp-modal-close {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  transition: color 0.15s, background 0.15s;
+}
+.rp-modal-close:hover {
+  color: #ff004d;
+  background: rgba(255, 0, 77, 0.1);
+}
+
+.rp-code-editor {
+  flex: 1;
+  min-height: 300px;
+  max-height: 55vh;
+  background: #050505;
+  color: #e0e0e0;
+  border: none;
+  outline: none;
+  padding: 1rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  resize: none;
+  tab-size: 2;
+  white-space: pre;
+  overflow: auto;
+}
+
+.rp-modal-footer {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  padding: 0.65rem 1rem;
+  border-top: 1px solid rgba(255, 0, 77, 0.2);
+}
+
+.rp-btn-apply {
+  background: #ff004d;
+  color: #fff;
+  border: none;
+  border-radius: 0.3rem;
+  padding: 0.4rem 1rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+.rp-btn-apply:hover {
+  background: #ff3366;
+  box-shadow: 0 0 12px rgba(255, 0, 77, 0.5);
+}
+
+.rp-btn-cancel {
+  background: transparent;
+  color: #666;
+  border: 1px solid #333;
+  border-radius: 0.3rem;
+  padding: 0.4rem 1rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.rp-btn-cancel:hover {
+  color: #999;
+  border-color: #555;
+}
+
+/* ── Card drag system ─────────────────────────────────────────────────────── */
+
+.rp-card-draggable {
+  cursor: grab !important;
+}
+.rp-card-draggable:active {
+  cursor: grabbing !important;
+}
+
+/* The ghost clone dropped on the page */
+.rp-card-ghost {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 24px rgba(255, 0, 77, 0.2) !important;
+}
+.rp-card-dropped {
+  cursor: grab !important;
+}
+.rp-card-dropped:active {
+  cursor: grabbing !important;
+}
+
+/* ── Contact philosophical text ───────────────────────────────────────────── */
+
+.rp-contact-msg {
+  padding: 4rem 2rem 6rem;
+}
+
+.rp-contact-intro {
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem) !important;
+  color: #ff004d !important;
+  font-weight: 600 !important;
+  margin-bottom: 2rem !important;
+  line-height: 1.7 !important;
+}
+
+.rp-contact-msg p {
+  font-size: clamp(0.95rem, 1.8vw, 1.1rem) !important;
+  line-height: 1.9 !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+  margin-bottom: 1.75rem !important;
+  font-weight: 400 !important;
+  max-width: 72ch;
+}
+
+/* 5th paragraph ("I know this because I was one of them.") — emphasis */
+.rp-contact-msg p:nth-child(6) {
+  color: #ff004d !important;
+  font-style: italic !important;
+  font-size: clamp(1rem, 2vw, 1.2rem) !important;
+  padding-left: 1.5rem !important;
+  border-left: 3px solid rgba(255, 0, 77, 0.5) !important;
+}
+
+/* Last paragraph — fades out */
+.rp-contact-msg p:last-child {
+  color: rgba(255, 255, 255, 0.4) !important;
+  font-size: clamp(0.9rem, 1.6vw, 1rem) !important;
+}
