@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navigation/TopNav/NavBar";
+import KonamiEgg from "@/components/Easter/KonamiEgg";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,6 +25,7 @@ export default function RootLayout({
           <Navbar />
         </header>
         <main className="pd-4">{children}</main>
+        <KonamiEgg />
       </body>
     </html>
   );

@@ -10,7 +10,8 @@ func KeepAlive() {
 	url := "https://portfolio-353g.onrender.com"
 	res, err := http.Get(url)
 	if err != nil {
-		log.Printf("Error getting %s. Error: %s. Response: %s", url, err, res.Status)
+		log.Printf("Error getting %s. Error: %s", url, err)
+		return
 	}
 
 	defer res.Body.Close()

@@ -1,17 +1,19 @@
-import React, { useRef, useLayoutEffect } from 'react';
+import React, { useRef, useLayoutEffect, useEffect } from 'react';
 import Matter from 'matter-js';
 
 const { Engine, Render, Composite, Bodies, Mouse, MouseConstraint } = Matter;
 
-export default function Draggable() {
-  interface CustomBodyRenderOptions extends Matter.IBodyRenderOptions {
-    text?: string;
-  }
+interface CustomBodyRenderOptions extends Matter.IBodyRenderOptions {
+  text?: string;
+}
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const engineRef = useRef<Matter.Engine | null>(null);
-  const renderRef = useRef<Matter.Render | null>(null);
+export default function Draggable() {
+  const containerRef       = useRef<HTMLDivElement>(null);
+  const canvasRef          = useRef<HTMLCanvasElement>(null);
+  const engineRef          = useRef<Matter.Engine | null>(null);
+  const renderRef          = useRef<Matter.Render | null>(null);
+  const wordBodiesRef      = useRef<Matter.Body[]>([]);
+  const mouseConstraintRef = useRef<Matter.MouseConstraint | null>(null);
   const words = [
     'Dad',
     'Husband',
@@ -23,9 +25,7 @@ export default function Draggable() {
   ];
 
   useLayoutEffect(() => {
-    console.log('Canvas element:', canvasRef.current);
     if (!containerRef.current || !canvasRef.current) {
-      console.error('Error! containerRef or canvasRef not detected');
       return;
     }
 
@@ -54,7 +54,7 @@ export default function Draggable() {
       },
     });
     renderRef.current = render;
-    
+
     // Create walls aligned with canvas edges
     const walls = [
       // Ground (bottom)
@@ -119,11 +119,10 @@ export default function Draggable() {
       });
     });
 
+    wordBodiesRef.current = wordBodies;
     Composite.add(engine.world, [...walls, ...wordBodies]);
-    console.log('Bodies added:', engine.world.bodies);
 
     const mouse = Mouse.create(render.canvas);
-    console.log('Mouse created with canvas:', render.canvas);
     const mouseConstraint = MouseConstraint.create(engine, {
       mouse: mouse,
       constraint: {
@@ -131,9 +130,9 @@ export default function Draggable() {
         render: { visible: false },
       },
     });
+    mouseConstraintRef.current = mouseConstraint;
     Composite.add(engine.world, mouseConstraint);
     render.mouse = mouse;
-    console.log('MouseConstraint:', mouseConstraint);
 
     Matter.Events.on(render, 'afterRender', () => {
       const context = render.context;
@@ -156,7 +155,6 @@ export default function Draggable() {
 
     const canvas = canvasRef.current;
     const handleTouch = (e: TouchEvent) => {
-      console.log("Touch Event:", e.type);
       e.preventDefault();
       e.stopPropagation();
     }
@@ -195,6 +193,35 @@ export default function Draggable() {
       canvas.removeEventListener('touchcancel', handleTouch);
       render.canvas.remove();
     };
+  }, []);
+
+  // Listen for physics updates dispatched by RedPillMode
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const { key, val } = (e as CustomEvent<{ key: string; val: number }>).detail;
+      const engine = engineRef.current;
+      if (!engine) return;
+
+      switch (key) {
+        case 'gravity':
+          engine.gravity.y = val;
+          break;
+        case 'friction':
+          wordBodiesRef.current.forEach(b => Matter.Body.set(b, 'friction', val));
+          break;
+        case 'bounce':
+          wordBodiesRef.current.forEach(b => Matter.Body.set(b, 'restitution', val));
+          break;
+        case 'stiffness':
+          if (mouseConstraintRef.current) {
+            mouseConstraintRef.current.constraint.stiffness = val;
+          }
+          break;
+      }
+    };
+
+    window.addEventListener('konami-physics', handler);
+    return () => window.removeEventListener('konami-physics', handler);
   }, []);
 
   return (

@@ -1,0 +1,149 @@
+/* ─── Konami Pill Choice Overlay ─────────────────────────────────────────── */
+
+.konami-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  animation: konami-fade-in 0.8s ease forwards;
+  padding: 2rem;
+}
+
+@keyframes konami-fade-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.konami-wake {
+  font-family: 'Courier New', monospace;
+  font-size: clamp(1.5rem, 4vw, 2.8rem);
+  color: #00ff41;
+  text-shadow: 0 0 12px #00ff41, 0 0 30px #00ff41;
+  letter-spacing: 0.12em;
+  margin: 0;
+  animation: konami-flicker 3s ease infinite;
+}
+
+@keyframes konami-flicker {
+  0%, 95%, 100% { opacity: 1; }
+  96%            { opacity: 0.7; }
+  97%            { opacity: 1; }
+  98%            { opacity: 0.4; }
+  99%            { opacity: 1; }
+}
+
+.konami-prompt {
+  font-family: 'Courier New', monospace;
+  font-size: clamp(0.9rem, 2.5vw, 1.3rem);
+  color: #7fffb0;
+  letter-spacing: 0.08em;
+  margin: 0;
+  opacity: 0.85;
+}
+
+.konami-pills {
+  display: flex;
+  gap: 3rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.konami-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.4rem 2.2rem;
+  border: 2px solid transparent;
+  border-radius: 0.75rem;
+  background: rgba(0, 0, 0, 0.65);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  min-width: 160px;
+  font-family: 'Courier New', monospace;
+}
+
+.konami-pill:focus-visible {
+  outline: 3px solid #00ff41;
+  outline-offset: 3px;
+}
+
+.konami-pill-glyph {
+  font-size: 2.5rem;
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+.konami-pill strong {
+  font-size: 1.1rem;
+  letter-spacing: 0.08em;
+  color: inherit;
+}
+
+.konami-pill em {
+  font-size: 0.78rem;
+  opacity: 0.75;
+  font-style: normal;
+  color: inherit;
+}
+
+/* Red pill */
+.konami-red {
+  border-color: #cc1111;
+  color: #ff5555;
+  box-shadow: 0 0 18px rgba(200, 0, 0, 0.4), inset 0 0 12px rgba(200, 0, 0, 0.1);
+}
+.konami-red .konami-pill-glyph {
+  filter: hue-rotate(320deg) drop-shadow(0 0 8px #ff2222);
+}
+.konami-red:hover,
+.konami-red:focus-visible {
+  transform: translateY(-4px) scale(1.05);
+  background: rgba(150, 0, 0, 0.3);
+  box-shadow: 0 0 36px rgba(220, 0, 0, 0.7), inset 0 0 16px rgba(200, 0, 0, 0.2);
+}
+
+/* Blue pill */
+.konami-blue {
+  border-color: #1166cc;
+  color: #55aaff;
+  box-shadow: 0 0 18px rgba(0, 80, 220, 0.4), inset 0 0 12px rgba(0, 80, 220, 0.1);
+}
+.konami-blue .konami-pill-glyph {
+  filter: hue-rotate(200deg) drop-shadow(0 0 8px #2255ff);
+}
+.konami-blue:hover,
+.konami-blue:focus-visible {
+  transform: translateY(-4px) scale(1.05);
+  background: rgba(0, 40, 150, 0.3);
+  box-shadow: 0 0 36px rgba(0, 100, 255, 0.7), inset 0 0 16px rgba(0, 80, 220, 0.2);
+}
+
+/* ─── Exit Fun Mode button ────────────────────────────────────────────────── */
+
+.konami-exit-fun {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  z-index: 9999;
+  background: linear-gradient(135deg, #ff6b9d, #c77dff);
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.3rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  box-shadow: 0 4px 18px rgba(199, 125, 255, 0.45);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.konami-exit-fun:hover {
+  transform: scale(1.06);
+  box-shadow: 0 6px 24px rgba(199, 125, 255, 0.65);
+}

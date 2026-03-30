@@ -1,0 +1,198 @@
+/* ─── Blue Pill: Fun Mode ─────────────────────────────────────────────────── */
+/* Applied by adding .fun-mode to <html>. Overrides CSS custom properties     */
+/* and sprinkles in pastel colors, rounded corners, and bouncy animations.    */
+
+:root.fun-mode {
+  --primary:     #ff6b9d;
+  --secondary:   #ffd93d;
+  --primary-alt: #6bcfff;
+  --buttons:     #ff6b9d;
+  --dk-bg:       #fff5fa;
+  --dk-bg-alt:   #fff0f8;
+  --text:        #2d1b4e;
+  --text-alt:    #2d1b4e;
+  --white:       #ffffff;
+  --black:       #2d1b4e;
+  --glow:        #ffb3d9;
+
+  --trn-sp:       0.25s;
+  --btn-trn-sp:   0.25s;
+}
+
+/* ── Body background ────────────────────────────────────────────────── */
+.fun-mode body {
+  background: linear-gradient(
+    135deg,
+    #fff0f8 0%,
+    #f0f4ff 40%,
+    #fffbe7 80%,
+    #f0fff4 100%
+  ) !important;
+  background-attachment: fixed !important;
+  color: #2d1b4e !important;
+}
+
+/* ── Round everything ──────────────────────────────────────────────── */
+.fun-mode *:not(canvas):not(path):not(svg):not(circle):not(g) {
+  border-radius: 1rem !important;
+}
+
+/* Keep the draggable canvas looking fine */
+.fun-mode canvas {
+  border-radius: 1.5rem !important;
+}
+
+/* ── Headings & strong: rainbow gradient text ──────────────────────── */
+.fun-mode h1,
+.fun-mode h2,
+.fun-mode h3,
+.fun-mode .fnt-1,
+.fun-mode .fnt-big,
+.fun-mode strong:not(.pill-bg strong) {
+  background: linear-gradient(90deg, #ff6b9d 0%, #c77dff 40%, #6bcfff 70%, #ffd93d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent !important;
+}
+
+/* ── Links ─────────────────────────────────────────────────────────── */
+.fun-mode a {
+  color: #c77dff !important;
+}
+.fun-mode a:hover,
+.fun-mode a:focus {
+  color: #ff6b9d !important;
+}
+
+/* ── Buttons ────────────────────────────────────────────────────────── */
+.fun-mode .btn.v1 {
+  background: linear-gradient(135deg, #ff6b9d, #c77dff) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+  box-shadow: 0 4px 16px rgba(255, 107, 157, 0.45) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+.fun-mode .btn.v1:hover,
+.fun-mode .btn.v1:focus {
+  transform: scale(1.06) translateY(-2px) !important;
+  box-shadow: 0 8px 24px rgba(255, 107, 157, 0.65) !important;
+  background: linear-gradient(135deg, #ff85b3, #a855f7) !important;
+  color: #fff !important;
+}
+
+/* ── Navbar ─────────────────────────────────────────────────────────── */
+.fun-mode .navbar {
+  background: linear-gradient(90deg, rgba(255,183,217,0.85), rgba(179,213,255,0.85)) !important;
+  box-shadow: 0 4px 20px rgba(255, 107, 157, 0.25) !important;
+  border-radius: 0 0 2rem 2rem !important;
+}
+.fun-mode .mn-nav a,
+.fun-mode .sec-nav a {
+  color: #7b2d8b !important;
+}
+.fun-mode .mn-nav a:hover,
+.fun-mode .sec-nav a:hover {
+  color: #ff6b9d !important;
+}
+
+/* ── Mobile nav ─────────────────────────────────────────────────────── */
+.fun-mode .mbl-nav {
+  background: rgba(255, 240, 252, 0.92) !important;
+  box-shadow: 0 8px 32px rgba(255, 107, 157, 0.3) !important;
+}
+.fun-mode .opn-icn,
+.fun-mode .cls-icn {
+  fill: #c77dff !important;
+}
+
+/* ── Skill pills ────────────────────────────────────────────────────── */
+.fun-mode .pill-bg {
+  background: linear-gradient(135deg, #ff6b9d, #ffd93d) !important;
+  box-shadow: 0 4px 20px rgba(255, 107, 157, 0.45) !important;
+  color: #fff !important;
+  animation: fun-bounce 2s ease infinite;
+}
+.fun-mode .pill-bg:nth-child(2n)   { animation-delay: 0.2s; }
+.fun-mode .pill-bg:nth-child(3n)   { animation-delay: 0.4s; }
+.fun-mode .pill-bg:nth-child(4n)   { animation-delay: 0.6s; }
+.fun-mode .pill-bg:nth-child(5n)   { animation-delay: 0.8s; }
+
+@keyframes fun-bounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-5px); }
+}
+
+/* ── Project cards ──────────────────────────────────────────────────── */
+.fun-mode .card .card-inner {
+  background: rgba(255, 240, 252, 0.9) !important;
+  box-shadow: 0 8px 32px rgba(255, 107, 157, 0.2) !important;
+  color: #2d1b4e !important;
+  border: 2px solid rgba(255, 107, 157, 0.25) !important;
+}
+.fun-mode .card .card-inner p {
+  color: #4a2d6e !important;
+}
+
+/* ── Contact form ───────────────────────────────────────────────────── */
+.fun-mode .contact-form .input-text :is(input, textarea) {
+  border: 2px solid #c77dff !important;
+  background: #fff5fa !important;
+  color: #2d1b4e !important;
+}
+.fun-mode .contact-form .input-text input:valid,
+.fun-mode .contact-form .input-text textarea:valid {
+  border-color: #ff6b9d !important;
+}
+.fun-mode label {
+  color: #7b2d8b !important;
+}
+
+/* ── Modal ──────────────────────────────────────────────────────────── */
+.fun-mode .modal-container {
+  background: rgba(255, 240, 252, 0.95) !important;
+  color: #2d1b4e !important;
+  box-shadow: 0 8px 40px rgba(255, 107, 157, 0.3) !important;
+}
+
+/* ── Social icons ───────────────────────────────────────────────────── */
+.fun-mode .social a {
+  transition: transform 0.2s ease !important;
+}
+.fun-mode .social a:hover {
+  transform: scale(1.15) rotate(5deg) !important;
+}
+
+/* ── Grid background ────────────────────────────────────────────────── */
+.fun-mode .grid-container {
+  opacity: 0.06 !important;
+  background: none !important;
+}
+.fun-mode .x-line,
+.fun-mode .y-line {
+  background-color: #ff6b9d !important;
+}
+
+/* ── Draggable physics box ──────────────────────────────────────────── */
+.fun-mode .mainstage .draggable {
+  background: rgba(255, 240, 252, 0.55) !important;
+  box-shadow: 0 0 30px rgba(255, 107, 157, 0.3) !important;
+}
+
+/* ── Hover lift for interactive elements ────────────────────────────── */
+.fun-mode a:not(.btn),
+.fun-mode button {
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+.fun-mode a:not(.btn):hover,
+.fun-mode button:not(.konami-exit-fun):hover {
+  transform: translateY(-2px) !important;
+}
+
+/* ── About section ──────────────────────────────────────────────────── */
+.fun-mode #AboutMe {
+  background: rgba(255, 240, 252, 0.4) !important;
+}
+.fun-mode #AboutMe p {
+  color: #4a2d6e !important;
+}
