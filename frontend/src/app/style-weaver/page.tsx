@@ -254,14 +254,22 @@ export default function StyleWeaverPage() {
         body: JSON.stringify({ fileKey, apiKey }),
       });
 
-      const json = await res.json();
-
-      if (!res.ok) {
-        setError(json.error ?? 'Unknown error');
+      // Read as text first so a non-JSON body (HTML error page, etc.) gives a useful message
+      const text = await res.text();
+      let json: Record<string, unknown>;
+      try {
+        json = JSON.parse(text);
+      } catch {
+        setError(`Server returned an unexpected response (status ${res.status}):\n${text.slice(0, 400)}`);
         return;
       }
 
-      setData(json);
+      if (!res.ok) {
+        setError((json.error as string) ?? 'Unknown error');
+        return;
+      }
+
+      setData(json as unknown as FigmaData);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Request failed');
     } finally {

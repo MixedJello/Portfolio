@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// ─────────────────────────────────────────────────────────────
+// Types
+// ─────────────────────────────────────────────────────────────
 interface FigmaColor {
   r: number;
   g: number;
@@ -40,6 +43,9 @@ interface FigmaStyle {
   styleType: string;
 }
 
+// ─────────────────────────────────────────────────────────────
+// Helpers
+// ─────────────────────────────────────────────────────────────
 function colorToHex(color: FigmaColor, opacity?: number): string {
   const r = Math.round(color.r * 255);
   const g = Math.round(color.g * 255);
@@ -48,71 +54,105 @@ function colorToHex(color: FigmaColor, opacity?: number): string {
   if (a < 0.99) {
     return `rgba(${r}, ${g}, ${b}, ${parseFloat(a.toFixed(2))})`;
   }
-  return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`.toUpperCase();
+  return (
+    '#' +
+    r.toString(16).padStart(2, '0') +
+    g.toString(16).padStart(2, '0') +
+    b.toString(16).padStart(2, '0')
+  ).toUpperCase();
 }
 
-function traverseNodes(node: FigmaNode, callback: (node: FigmaNode) => void): void {
-  callback(node);
-  if (node.children) {
-    for (const child of node.children) {
-      traverseNodes(child, callback);
+/** Iterative BFS traversal — avoids call-stack overflow on deep trees */
+function* iterateNodes(root: FigmaNode): Generator<FigmaNode> {
+  const queue: FigmaNode[] = [root];
+  while (queue.length > 0) {
+    const node = queue.shift()!;
+    yield node;
+    if (node.children) {
+      for (const child of node.children) queue.push(child);
     }
   }
 }
 
+async function figmaFetch(path: string, apiKey: string) {
+  const res = await fetch(`https://api.figma.com/v1${path}`, {
+    headers: { 'X-Figma-Token': apiKey },
+  });
+  const text = await res.text();
+  if (!res.ok) {
+    throw new Error(`Figma API ${res.status}: ${text.slice(0, 300)}`);
+  }
+  try {
+    return JSON.parse(text);
+  } catch {
+    throw new Error(`Figma returned non-JSON (status ${res.status}): ${text.slice(0, 200)}`);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// Route
+// ─────────────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
   try {
-    const { fileKey, apiKey } = await req.json();
+    const body = await req.json();
+    const { fileKey, apiKey } = body as { fileKey: string; apiKey: string };
 
     if (!fileKey || !apiKey) {
-      return NextResponse.json({ error: 'fileKey and apiKey are required' }, { status: 400 });
+      return NextResponse.json({ error: 'fileKey and apiKey are required.' }, { status: 400 });
     }
 
-    const res = await fetch(`https://api.figma.com/v1/files/${fileKey}`, {
-      headers: { 'X-Figma-Token': apiKey },
-    });
+    // ── Step 1: Fetch file at depth=1 (pages only) to locate "Figma API" page ──
+    const fileData = await figmaFetch(`/files/${fileKey}?depth=1`, apiKey);
 
-    if (!res.ok) {
-      const text = await res.text();
-      return NextResponse.json(
-        { error: `Figma API error ${res.status}: ${text}` },
-        { status: res.status }
-      );
-    }
-
-    const figmaFile = await res.json();
-
-    // Find the "Figma API" page
-    const figmaApiPage: FigmaNode | undefined = figmaFile.document?.children?.find(
-      (page: FigmaNode) => page.name === 'Figma API'
-    );
+    const pages: FigmaNode[] = fileData.document?.children ?? [];
+    const figmaApiPage = pages.find((p: FigmaNode) => p.name === 'Figma API');
 
     if (!figmaApiPage) {
+      const pageNames = pages.map((p: FigmaNode) => `"${p.name}"`).join(', ');
       return NextResponse.json(
-        { error: 'No page named "Figma API" found in this Figma file.' },
+        {
+          error: `No page named "Figma API" found in this file. Pages found: ${pageNames || '(none)'}`,
+        },
         { status: 404 }
       );
     }
 
-    // Build style ID → { name, styleType } map
-    const stylesMap: Record<string, FigmaStyle> = figmaFile.styles ?? {};
+    // Styles map lives at the file level regardless of depth
+    const stylesMap: Record<string, FigmaStyle> = fileData.styles ?? {};
 
-    // Collect color values keyed by Figma style name
+    // ── Step 2: Fetch only the nodes of the "Figma API" page ──
+    const encodedId = encodeURIComponent(figmaApiPage.id);
+    const nodesData = await figmaFetch(`/files/${fileKey}/nodes?ids=${encodedId}`, apiKey);
+
+    const pageNodeEntry = nodesData.nodes?.[figmaApiPage.id];
+    const pageDocument: FigmaNode | undefined = pageNodeEntry?.document;
+
+    if (!pageDocument) {
+      return NextResponse.json(
+        { error: 'Could not retrieve nodes for the "Figma API" page.' },
+        { status: 500 }
+      );
+    }
+
+    // Merge styles from the nodes response (may include remote library styles)
+    const nodeStyles: Record<string, FigmaStyle> = pageNodeEntry?.styles ?? {};
+    Object.assign(stylesMap, nodeStyles);
+
+    // ── Step 3: Traverse nodes, collect colors and text styles ──
     const colorsByStyleName: Record<string, string> = {};
-    // Collect text styles keyed by Figma style name
     const textStylesByName: Record<string, FigmaTypeStyle> = {};
 
-    traverseNodes(figmaApiPage, (node) => {
-      if (!node.styles) return;
+    for (const node of iterateNodes(pageDocument)) {
+      if (!node.styles) continue;
 
       // FILL style
       const fillStyleId = node.styles['fill'] ?? node.styles['fills'];
       if (fillStyleId && stylesMap[fillStyleId]?.styleType === 'FILL') {
         const styleName = stylesMap[fillStyleId].name;
-        if (node.fills && node.fills.length > 0) {
-          const solidFill = node.fills.find((f) => f.type === 'SOLID' && f.color);
-          if (solidFill?.color) {
-            colorsByStyleName[styleName] = colorToHex(solidFill.color, solidFill.opacity);
+        if (!colorsByStyleName[styleName] && node.fills) {
+          const solid = node.fills.find((f) => f.type === 'SOLID' && f.color);
+          if (solid?.color) {
+            colorsByStyleName[styleName] = colorToHex(solid.color, solid.opacity);
           }
         }
       }
@@ -121,18 +161,21 @@ export async function POST(req: NextRequest) {
       const textStyleId = node.styles['text'];
       if (textStyleId && stylesMap[textStyleId]?.styleType === 'TEXT') {
         const styleName = stylesMap[textStyleId].name;
-        if (node.style) {
+        if (!textStylesByName[styleName] && node.style) {
           textStylesByName[styleName] = node.style;
         }
       }
-    });
+    }
 
     return NextResponse.json({
       colors: colorsByStyleName,
       fonts: textStylesByName,
     });
   } catch (err) {
-    console.error('Figma API route error:', err);
-    return NextResponse.json({ error: 'Unexpected server error' }, { status: 500 });
+    console.error('[figma route]', err);
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : 'Unexpected server error.' },
+      { status: 500 }
+    );
   }
 }
