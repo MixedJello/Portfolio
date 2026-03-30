@@ -62,16 +62,18 @@ function colorToHex(color: FigmaColor, opacity?: number): string {
   ).toUpperCase();
 }
 
-/** Iterative BFS traversal — avoids call-stack overflow on deep trees */
-function* iterateNodes(root: FigmaNode): Generator<FigmaNode> {
+/** Iterative BFS — avoids call-stack overflow on deep trees */
+function collectNodes(root: FigmaNode): FigmaNode[] {
+  const result: FigmaNode[] = [];
   const queue: FigmaNode[] = [root];
   while (queue.length > 0) {
-    const node = queue.shift()!;
-    yield node;
+    const node = queue.shift() as FigmaNode;
+    result.push(node);
     if (node.children) {
       for (const child of node.children) queue.push(child);
     }
   }
+  return result;
 }
 
 async function figmaFetch(path: string, apiKey: string) {
@@ -142,7 +144,8 @@ export async function POST(req: NextRequest) {
     const colorsByStyleName: Record<string, string> = {};
     const textStylesByName: Record<string, FigmaTypeStyle> = {};
 
-    for (const node of iterateNodes(pageDocument)) {
+    const allNodes = collectNodes(pageDocument);
+    for (const node of allNodes) {
       if (!node.styles) continue;
 
       // FILL style
