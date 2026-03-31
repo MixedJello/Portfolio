@@ -248,7 +248,7 @@ export default function StyleWeaverPage() {
 
     try {
       const fileKey = parseFileKey(figmaUrl);
-      const res = await fetch('/api/figma', {
+      const res = await fetch('/figma-proxy', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fileKey, apiKey }),
