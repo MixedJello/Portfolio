@@ -42,36 +42,44 @@ const COLOR_MAPPINGS: [string, string][] = [
   ['--accent-bg-alt', '--accent-alt'],
 ];
 
-// Typography: Figma style name → CSS variable prefix (or multiple prefixes)
-const FONT_MAPPINGS: [string, string | string[]][] = [
-  ['Title Big',        'fnt-t-big'],
-  ['Callout',          'fnt-t-co'],
-  ['Kicker',           'fnt-t-k'],
-  ['Title 1',          'fnt-t-1'],
-  ['Title 2',          'fnt-t-2'],
-  ['Title 3',          'fnt-t-3'],
-  ['Title 4',          'fnt-t-4'],
-  ['Title 5',          'fnt-t-5'],
-  ['Title 6',          'fnt-t-6'],
-  ['Primary Nav Link', 'fnt-nv-pry'],
-  ['Secondary Nav',    'fnt-nv-sec'],
-  ['Quote',            'fnt-qte'],
-  ['Author Name',      'fnt-atr'],
-  ['Phone Number',     'fnt-phn'],
-  ['Item',             'fnt-t-itm'],
-  ['Note',             'fnt-t-nt'],
-  ['Tag',              'tag'],
-  ['Button text',      ['btn-v1', 'btn-v2']],
-  ['Form Label',       'fnt-frm'],
+// Typography style definitions
+// figmaName  — name of the Figma TEXT style
+// prefix     — CSS variable prefix  (e.g. 'fnt-t-big' → --fnt-t-big-ff, -ls, -w, -tt)
+// friendly   — human label used inside /* comments */
+// hasTt      — emit --prefix-tt (text-transform)?  default true
+// hasFs      — emit --prefix-fs (font-style)?      default false
+// altPrefix / altFriendly — emit a second identical block (Button text → btn-v1 AND btn-v2)
+interface FontStyleDef {
+  figmaName:    string;
+  prefix:       string;
+  friendly:     string;
+  hasTt?:       boolean;
+  hasFs?:       boolean;
+  altPrefix?:   string;
+  altFriendly?: string;
+}
+
+const FONT_STYLE_DEFS: FontStyleDef[] = [
+  { figmaName: 'Title Big',        prefix: 'fnt-t-big',  friendly: 'Title Big' },
+  { figmaName: 'Callout',          prefix: 'fnt-t-co',   friendly: 'Callout' },
+  { figmaName: 'Kicker',           prefix: 'fnt-t-k',    friendly: 'Header Kicker' },
+  { figmaName: 'Title 1',          prefix: 'fnt-t-1',    friendly: 'Title 1' },
+  { figmaName: 'Title 2',          prefix: 'fnt-t-2',    friendly: 'Title 2' },
+  { figmaName: 'Title 3',          prefix: 'fnt-t-3',    friendly: 'Title 3' },
+  { figmaName: 'Title 4',          prefix: 'fnt-t-4',    friendly: 'Title 4' },
+  { figmaName: 'Title 5',          prefix: 'fnt-t-5',    friendly: 'Title 5' },
+  { figmaName: 'Title 6',          prefix: 'fnt-t-6',    friendly: 'Title 6' },
+  { figmaName: 'Primary Nav Link', prefix: 'fnt-nv-pry', friendly: 'Top Nav Link',        hasFs: true },
+  { figmaName: 'Secondary Nav',    prefix: 'fnt-nv-sec', friendly: 'Secondary Nav Link',   hasFs: true },
+  { figmaName: 'Quote',            prefix: 'fnt-qte',    friendly: 'Quote',                hasFs: true },
+  { figmaName: 'Author Name',      prefix: 'fnt-atr',    friendly: 'Author Name',          hasFs: true },
+  { figmaName: 'Phone Number',     prefix: 'fnt-phn',    friendly: 'Phone',                hasTt: false },
+  { figmaName: 'Item',             prefix: 'fnt-t-itm',  friendly: 'Item Title' },
+  { figmaName: 'Note',             prefix: 'fnt-t-nt',   friendly: 'Note' },
+  { figmaName: 'Tag',              prefix: 'tag',         friendly: 'Tag' },
+  { figmaName: 'Button text',      prefix: 'btn-v1',     friendly: 'Button V1', altPrefix: 'btn-v2', altFriendly: 'Button V2' },
+  { figmaName: 'Form Label',       prefix: 'fnt-frm',    friendly: 'Form Label' },
 ];
-
-// Which variable prefixes include a font-style (fs) property
-const HAS_FONT_STYLE = new Set([
-  'fnt-nv-pry', 'fnt-nv-sec', 'fnt-qte', 'fnt-atr',
-]);
-
-// Which variable prefixes omit the text-transform (tt) property
-const NO_TEXT_TRANSFORM = new Set(['fnt-phn']);
 
 // ─────────────────────────────────────────────────────────────
 // Helpers
@@ -79,23 +87,32 @@ const NO_TEXT_TRANSFORM = new Set(['fnt-phn']);
 function parseFileKey(input: string): string {
   const match = input.match(/(?:file|design)\/([a-zA-Z0-9_-]+)/);
   if (match) return match[1];
-  // If no URL pattern, assume it's already a key
   return input.trim();
 }
 
 function textCaseToCSS(tc?: string): string {
   switch (tc) {
-    case 'UPPER':       return 'uppercase';
-    case 'LOWER':       return 'lowercase';
-    case 'TITLE':       return 'capitalize';
-    case 'SMALL_CAPS':  return 'none';
-    default:            return 'none';
+    case 'UPPER':      return 'uppercase';
+    case 'LOWER':      return 'lowercase';
+    case 'TITLE':      return 'capitalize';
+    default:           return 'none';
   }
 }
 
-function letterSpacingToEm(ls: number, fontSize: number): string {
-  if (!fontSize || fontSize === 0) return '0';
-  return (ls / fontSize).toFixed(4);
+// Convert Figma letterSpacing (px) to em, trimming insignificant trailing zeros
+function lsToEm(ls: number, fontSize: number): number {
+  if (!fontSize) return 0;
+  return parseFloat((ls / fontSize).toFixed(4));
+}
+
+// Build the min/max/step part of the letter-spacing comment
+// Formula: convert em → notional px at 16px base; min = -px, max = px × 3
+function lsCommentRange(lsEm: number): string {
+  if (lsEm === 0) return 'min: -0.5, max: 0.5, step: .01';
+  const px  = lsEm * 16;
+  const min = parseFloat((-px).toFixed(2));
+  const max = parseFloat((px * 3).toFixed(2));
+  return `min: ${min}, max: ${max}, step: .01`;
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -110,60 +127,61 @@ function generateColorCSS(colors: Record<string, string>): string {
 }
 
 function generateFontCSS(fonts: Record<string, FigmaTypeStyle>): string {
-  // Determine --fnt-t and --fnt-m
-  const titleBig = fonts['Title Big'];
-  const paragraph = fonts['Paragraph'] ?? fonts['Body'] ?? fonts['Note'];
-  const fntT = titleBig?.fontFamily ?? '/* not found */';
+  // ── Identify the two root font families ──────────────────────────
+  const fntTRaw = fonts['Title Big']?.fontFamily ?? '';
+  const fntT    = fntTRaw.toLowerCase();
 
-  // Pick a body font: first style whose fontFamily differs from fntT, else same
+  // Body font: first style whose fontFamily differs from the title font
   let fntM = fntT;
-  if (paragraph?.fontFamily) {
-    fntM = paragraph.fontFamily;
-  } else {
-    for (const [name] of FONT_MAPPINGS) {
-      const style = fonts[name];
-      if (style && style.fontFamily && style.fontFamily !== fntT) {
-        fntM = style.fontFamily;
-        break;
-      }
-    }
+  for (const def of FONT_STYLE_DEFS) {
+    const ff = fonts[def.figmaName]?.fontFamily?.toLowerCase();
+    if (ff && ff !== fntT) { fntM = ff; break; }
   }
 
+  // Resolve var() reference for a given fontFamily
+  const ffVar = (fontFamily?: string) =>
+    (fontFamily?.toLowerCase() === fntT) ? 'var(--fnt-t)' : 'var(--fnt-m)';
+
+  // ── Build CSS lines ───────────────────────────────────────────────
   const lines: string[] = [
-    `    --fnt-t: "${fntT}", sans-serif;`,
-    `    --fnt-m: "${fntM}", sans-serif;`,
-    '',
+    `    --fnt-t: "${fntT || 'not found'}", sans-serif;`,
+    `    --fnt-m: "${fntM || 'not found'}", sans-serif;`,
   ];
 
-  for (const [figmaName, prefixOrPrefixes] of FONT_MAPPINGS) {
-    const style = fonts[figmaName];
-    const prefixes = Array.isArray(prefixOrPrefixes) ? prefixOrPrefixes : [prefixOrPrefixes];
+  // Helper: emit one complete block for a single prefix + friendly label
+  const emitBlock = (
+    prefix: string,
+    friendly: string,
+    style: FigmaTypeStyle | undefined,
+    hasTt: boolean,
+    hasFs: boolean,
+  ) => {
+    lines.push('');
+    const lsEm = style ? lsToEm(style.letterSpacing, style.fontSize) : 0;
+    const ff   = ffVar(style?.fontFamily);
+    const w    = style?.fontWeight ?? 400;
+    const tt   = style ? textCaseToCSS(style.textCase) : 'none';
+    const fs   = style?.italic ? 'italic' : 'normal';
 
-    for (const prefix of prefixes) {
-      const ff  = style?.fontFamily   ?? '/* not found */';
-      const ls  = style ? letterSpacingToEm(style.letterSpacing, style.fontSize) : '0';
-      const w   = style?.fontWeight   ?? '/* not found */';
-      const tt  = style ? textCaseToCSS(style.textCase) : '/* not found */';
-      const fs  = style?.italic ? 'italic' : 'normal';
+    lines.push(`    --${prefix}-ff: ${ff}; /* { friendly: '${friendly} Font Family' } */`);
+    lines.push(`    --${prefix}-ls: ${lsEm}em; /* { ${lsCommentRange(lsEm)}, friendly: '${friendly} Letter Spacing' } */`);
+    lines.push(`    --${prefix}-w: ${w}; /* { friendly: '${friendly} Font Weight' } */`);
+    if (hasTt) lines.push(`    --${prefix}-tt: ${tt}; /* { friendly: '${friendly} Case' } */`);
+    if (hasFs) lines.push(`    --${prefix}-fs: ${fs}; /* { friendly: '${friendly} Style' } */`);
+  };
 
-      lines.push(`    --${prefix}-ff: ${ff};`);
-      lines.push(`    --${prefix}-ls: ${ls}em;`);
-      lines.push(`    --${prefix}-w: ${w};`);
+  for (const def of FONT_STYLE_DEFS) {
+    const style  = fonts[def.figmaName];
+    const hasTt  = def.hasTt !== false;
+    const hasFs  = def.hasFs === true;
 
-      if (!NO_TEXT_TRANSFORM.has(prefix)) {
-        lines.push(`    --${prefix}-tt: ${tt};`);
-      }
+    emitBlock(def.prefix, def.friendly, style, hasTt, hasFs);
 
-      if (HAS_FONT_STYLE.has(prefix)) {
-        lines.push(`    --${prefix}-fs: ${fs};`);
-      }
-
-      lines.push('');
+    // Button text emits a second identical block for btn-v2
+    if (def.altPrefix && def.altFriendly) {
+      emitBlock(def.altPrefix, def.altFriendly, style, hasTt, hasFs);
     }
   }
-
-  // Remove trailing blank line
-  while (lines[lines.length - 1] === '') lines.pop();
 
   return `:root {\n${lines.join('\n')}\n}`;
 }
