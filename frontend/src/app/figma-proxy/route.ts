@@ -147,6 +147,8 @@ export async function POST(req: NextRequest) {
     const textStylesByName: Record<string, FigmaTypeStyle> = {};
 
     const allNodes = collectNodes(pageDocument);
+
+    // Pass A — Figma named-style approach (fills/text with library style IDs)
     for (const node of allNodes) {
       if (!node.styles) continue;
 
@@ -171,6 +173,30 @@ export async function POST(req: NextRequest) {
         }
       }
     }
+
+    // Pass B — Node-name approach: find "USC Swatches" frames and read fills by node name.
+    // The first matching frame = default colors, subsequent frames = alt colors.
+    // Mirrors the C# SelectTokens("..children[?(@.name == 'USC Swatches')]") pattern.
+    const swatchFrames = allNodes.filter(
+      (n) =>
+        n.name.toLowerCase().includes('swatches') &&
+        ['FRAME', 'GROUP', 'COMPONENT', 'INSTANCE', 'COMPONENT_SET'].includes(n.type)
+    );
+
+    swatchFrames.forEach((frame, frameIndex) => {
+      const isAlt = frameIndex > 0;
+      for (const child of collectNodes(frame)) {
+        if (!child.name.startsWith('--') || !child.fills) continue;
+        const solid = child.fills.find((f) => f.type === 'SOLID' && f.color);
+        if (!solid?.color) continue;
+        // If this is an alt frame and the name doesn't already end in -alt, append it
+        const varName =
+          isAlt && !child.name.endsWith('-alt') ? child.name + '-alt' : child.name;
+        if (!colorsByStyleName[varName]) {
+          colorsByStyleName[varName] = colorToHex(solid.color, solid.opacity);
+        }
+      }
+    });
 
     return NextResponse.json({
       colors: colorsByStyleName,
