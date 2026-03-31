@@ -107,13 +107,15 @@ export async function POST(req: NextRequest) {
     const fileData = await figmaFetch(`/files/${fileKey}?depth=1`, apiKey);
 
     const pages: FigmaNode[] = fileData.document?.children ?? [];
-    const figmaApiPage = pages.find((p: FigmaNode) => p.name === 'Figma API');
+    const figmaApiPage = pages.find((p: FigmaNode) =>
+      p.name.toLowerCase().includes('figma api')
+    );
 
     if (!figmaApiPage) {
       const pageNames = pages.map((p: FigmaNode) => `"${p.name}"`).join(', ');
       return NextResponse.json(
         {
-          error: `No page named "Figma API" found in this file. Pages found: ${pageNames || '(none)'}`,
+          error: `No page containing "Figma API" found in this file. Pages found: ${pageNames || '(none)'}`,
         },
         { status: 404 }
       );
